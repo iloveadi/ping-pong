@@ -6,28 +6,28 @@ import { FeedSource, ParsedPost } from './types';
 export const DEFAULT_FEEDS: FeedSource[] = [
   {
     id: 'naver-desktools',
-    name: '[NB]Desktools',
+    name: 'Desktools.run 블로그',
     url: 'https://rss.blog.naver.com/desktools.xml',
     category: 'Desk Tools',
     isActive: true,
   },
   {
     id: 'naver-clpecha',
-    name: '[NB]clpecha',
+    name: '폐차마켓 블로그',
     url: 'https://rss.blog.naver.com/clpecha.xml',
     category: 'Lifestyle & Tech',
     isActive: true,
   },
   {
     id: 'naver-mind-archive',
-    name: '[NB]마음산책',
+    name: '마음산책',
     url: 'https://rss.blog.naver.com/mind-archive.xml',
     category: 'Mind & Essay',
     isActive: true,
   },
   {
     id: 'wp-pechamarket',
-    name: '[WP]폐차마켓',
+    name: '폐차마켓',
     url: 'http://pechamarket.co.kr/feed/',
     category: 'Auto & Market',
     isActive: true,

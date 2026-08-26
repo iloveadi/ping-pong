@@ -22,7 +22,7 @@ function formatDate(dateStr: string): string {
   }
 }
 
-const ORDERED_TAB_KEYS = ['[NB]Desktools', '[NB]clpecha', '[NB]마음산책', '[WP]폐차마켓'];
+const ORDERED_TAB_KEYS = ['Desktools.run 블로그', '폐차마켓 블로그', '마음산책', '폐차마켓'];
 
 // 블로그별 시그니처 컬러 테마 매핑
 function getBlogBadgeStyle(blogName: string) {
@@ -33,7 +33,7 @@ function getBlogBadgeStyle(blogName: string) {
       accentText: 'group-hover:text-emerald-300',
     };
   }
-  if (blogName.includes('clpecha') || blogName.includes('lpecha')) {
+  if (blogName === '폐차마켓 블로그') {
     return {
       badge: 'bg-amber-950/80 text-amber-300 border-amber-500/30',
       activeTab: 'from-amber-600 to-orange-600 text-white shadow-amber-500/25',
@@ -47,7 +47,7 @@ function getBlogBadgeStyle(blogName: string) {
       accentText: 'group-hover:text-rose-300',
     };
   }
-  if (blogName.includes('폐차마켓')) {
+  if (blogName === '폐차마켓') {
     return {
       badge: 'bg-sky-950/80 text-sky-300 border-sky-500/30',
       activeTab: 'from-sky-600 to-blue-600 text-white shadow-sky-500/25',

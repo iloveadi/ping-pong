@@ -42,19 +42,19 @@ export default async function HomePage() {
   return (
     <div className="space-y-10">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-950/70 via-slate-900/90 to-slate-950 border border-indigo-900/40 p-6 sm:p-10 shadow-2xl">
+      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-950/80 via-slate-900/90 to-slate-950 border border-indigo-900/40 p-6 sm:p-8 shadow-2xl">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="max-w-2xl space-y-3">
+          <div className="max-w-2xl space-y-2.5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
               <Rss className="w-3.5 h-3.5" />
-              <span>실시간 RSS 백링크 수집기</span>
+              <span>지식 &amp; 라이프 큐레이션 포털</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-              최신 블로그 포스팅 &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">dofollow 백링크</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
+              핑퐁허브와 함께하는 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400">인사이트 큐레이션</span>
             </h1>
-            <p className="text-sm sm:text-base text-slate-300">
-              다양한 기술 블로그의 핵심 요약(150자)을 모아보고 원문 링크로 바로 이동할 수 있습니다.
-              검색엔진 최적화(SEO) 표준에 맞추어 원문 dofollow 링크를 안전하게 연결합니다.
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              업무 생산성 툴부터 자동차 라이프, 마음 치유 에세이까지 다양한 인사이트를 한눈에 모아보세요.
+              핵심 요약과 함께 공식 원문 포스팅으로 바로 이동할 수 있습니다.
             </p>
           </div>
 
@@ -63,11 +63,11 @@ export default async function HomePage() {
             <div className="text-xs text-slate-400 flex items-center gap-4">
               <span className="flex items-center gap-1.5">
                 <Layers className="w-3.5 h-3.5 text-indigo-400" />
-                등록 피드 <strong>{DEFAULT_FEEDS.length}개</strong>
+                큐레이션 채널 <strong>{DEFAULT_FEEDS.length}개</strong>
               </span>
               <span className="flex items-center gap-1.5">
                 <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
-                수집된 글 <strong>{posts.length}개</strong>
+                등록 아티클 <strong>{posts.length}개</strong>
               </span>
             </div>
           </div>

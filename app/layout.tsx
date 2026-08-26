@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Tech & Blog Hub | 실시간 블로그 RSS 백링크 수집기',
-  description: '주요 기술 및 전문 블로그의 최신 포스팅 요약 정보와 원문 백링크(dofollow)를 자동으로 수집하여 제공하는 허브 플랫폼입니다.',
-  keywords: ['블로그 RSS', '백링크', '기술 블로그', '개발 트렌드', 'RSS 피드 수집'],
+  title: '핑퐁허브 (PingPong Hub) | 엄선된 블로그 & 라이프 큐레이션',
+  description: '생산성 도구, 자동차 라이프, 마음 치유 에세이까지 유익한 최신 블로그 아티클을 매일 엄선하여 전해드리는 지식 큐레이션 허브입니다.',
+  keywords: ['핑퐁허브', 'PingPong Hub', '블로그 큐레이션', 'Desktools', '폐차마켓', '마음산책', '라이프 트렌드'],
   referrer: 'no-referrer',
   robots: {
     index: true,
@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Tech & Blog Hub | 실시간 블로그 RSS 백링크 수집기',
-    description: '주요 기술 블로그의 최신 글 요약과 원문 dofollow 백링크를 확인하세요.',
+    title: '핑퐁허브 (PingPong Hub) | 엄선된 블로그 & 라이프 큐레이션',
+    description: '생산성 도구, 자동차 라이프, 마음 치유 에세이 등 유익한 아티클을 한곳에서 만나보세요.',
     type: 'website',
     locale: 'ko_KR',
   },
@@ -33,19 +33,19 @@ export default function RootLayout({
         <header className="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80">
           <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 text-white font-bold text-lg">
-                B
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/25 text-white font-black text-lg tracking-wider">
+                P
               </div>
-              <div>
-                <span className="font-bold text-lg text-white tracking-tight">BacklinkHub</span>
-                <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-900/60 text-indigo-300 border border-indigo-700/50 font-medium">
-                  RSS Auto
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-lg text-white tracking-tight">핑퐁허브</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-900/60 text-indigo-300 border border-indigo-700/50 font-medium">
+                  PingPong Hub
                 </span>
               </div>
             </div>
             <div className="text-xs text-slate-400 hidden sm:flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Vercel Cron 자동 수집 활성화</span>
+              <span>실시간 피드 자동 동기화</span>
             </div>
           </div>
         </header>
@@ -57,9 +57,9 @@ export default function RootLayout({
         <footer className="border-t border-slate-800/80 bg-slate-950/50 py-8 text-center text-xs text-slate-500">
           <div className="max-w-[1700px] mx-auto px-4">
             <p className="mb-2">
-              본 사이트는 블로그 RSS 피드를 자동 수집하여 150자 요약과 원문 백링크(dofollow)를 제공합니다.
+              핑퐁허브는 다양한 분야의 전문 블로그 포스팅을 엄선하여 핵심 요약과 공식 원문 링크를 제공합니다.
             </p>
-            <p>© {new Date().getFullYear()} BacklinkHub. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} PingPong Hub. All rights reserved.</p>
           </div>
         </footer>
       </body>

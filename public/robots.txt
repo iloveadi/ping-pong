@@ -2,5 +2,9 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
+User-agent: Yeti
+Allow: /
+Disallow: /api/
+
 Sitemap: https://www.moa.quest/sitemap.xml
 Sitemap: https://moa.quest/sitemap.xml

@@ -17,12 +17,15 @@ export const metadata: Metadata = {
     },
   },
   verification: {
+    google: 'JXr-mwmn5Z5l6c2TZS4PrGbmBOGWM6jD12uQuaApk64',
     other: {
       'naver-site-verification': 'dbffbb79f2d90d1b5c30946946627df41bba41d2',
+      'google-site-verification': 'JXr-mwmn5Z5l6c2TZS4PrGbmBOGWM6jD12uQuaApk64',
     },
   },
   other: {
     'naver-site-verification': 'dbffbb79f2d90d1b5c30946946627df41bba41d2',
+    'google-site-verification': 'JXr-mwmn5Z5l6c2TZS4PrGbmBOGWM6jD12uQuaApk64',
   },
   openGraph: {
     title: '핑퐁허브 (PingPong Hub) | 엄선된 블로그 & 라이프 큐레이션',

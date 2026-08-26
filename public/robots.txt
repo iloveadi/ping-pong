@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://www.moa.quest/sitemap.xml
+Sitemap: https://moa.quest/sitemap.xml

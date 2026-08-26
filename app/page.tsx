@@ -107,6 +107,7 @@ export default async function HomePage() {
                       src={post.thumbnail_url}
                       alt={post.title}
                       loading="lazy"
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                     />
                   ) : (

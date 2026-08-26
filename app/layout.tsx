@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: 'Tech & Blog Hub | 실시간 블로그 RSS 백링크 수집기',
   description: '주요 기술 및 전문 블로그의 최신 포스팅 요약 정보와 원문 백링크(dofollow)를 자동으로 수집하여 제공하는 허브 플랫폼입니다.',
   keywords: ['블로그 RSS', '백링크', '기술 블로그', '개발 트렌드', 'RSS 피드 수집'],
+  referrer: 'no-referrer',
   robots: {
     index: true,
     follow: true,

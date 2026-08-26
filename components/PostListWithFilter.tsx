@@ -25,7 +25,7 @@ function formatDate(dateStr: string): string {
 export default function PostListWithFilter({ initialPosts }: Props) {
   const [selectedBlog, setSelectedBlog] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [visibleCount, setVisibleCount] = useState<number>(12); // 초기 12개 표시
+  const [visibleCount, setVisibleCount] = useState<number>(15); // 한 줄 5개에 맞춰 초기 15개 표시
 
   // 등록된 고유 블로그 목록 및 각 블로그별 글 개수 계산
   const blogStats = useMemo(() => {
@@ -65,11 +65,11 @@ export default function PostListWithFilter({ initialPosts }: Props) {
 
   const handleSelectBlog = (blog: string) => {
     setSelectedBlog(blog);
-    setVisibleCount(12); // 필터 변경 시 첫 12개로 리셋
+    setVisibleCount(15); // 필터 변경 시 첫 15개로 리셋
   };
 
   const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 12);
+    setVisibleCount((prev) => prev + 15);
   };
 
   return (
@@ -126,7 +126,7 @@ export default function PostListWithFilter({ initialPosts }: Props) {
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              setVisibleCount(12);
+              setVisibleCount(15);
             }}
             placeholder="포스트 제목 or 내용 검색..."
             className="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-slate-950 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
@@ -148,20 +148,20 @@ export default function PostListWithFilter({ initialPosts }: Props) {
         <span>* 150자 요약본만 표시되며, 원문 보러 가기로 전체 본문을 열람합니다.</span>
       </div>
 
-      {/* 포스트 그리드 */}
+      {/* 5열 그리드 포스트 레이아웃 */}
       {filteredPosts.length === 0 ? (
         <div className="text-center py-20 bg-slate-900/40 rounded-2xl border border-slate-800/80">
           <p className="text-slate-400">조건에 맞는 포스팅이 없습니다.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {visiblePosts.map((post) => (
             <article
               key={post.id || post.original_url}
-              className="group flex flex-col bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 hover:border-indigo-500/50 rounded-2xl overflow-hidden transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-indigo-500/5 flex-grow"
+              className="group flex flex-col bg-slate-900/70 hover:bg-slate-900 border border-slate-800 hover:border-indigo-500/50 rounded-xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-indigo-500/5 flex-grow"
             >
               {/* 썸네일 영역 */}
-              <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950">
                 {post.thumbnail_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -173,55 +173,49 @@ export default function PostListWithFilter({ initialPosts }: Props) {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-500">
-                    <BookOpen className="w-10 h-10 stroke-1" />
+                    <BookOpen className="w-8 h-8 stroke-1" />
                   </div>
                 )}
 
                 {/* 카테고리 / 출처 뱃지 */}
-                <div className="absolute top-3 left-3">
-                  <span className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-950/80 backdrop-blur-md text-indigo-300 border border-slate-700/60 shadow">
+                <div className="absolute top-2.5 left-2.5">
+                  <span className="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-950/85 backdrop-blur-md text-indigo-300 border border-slate-700/60 shadow-sm">
                     {post.blog_name}
                   </span>
                 </div>
               </div>
 
               {/* 콘텐츠 영역 */}
-              <div className="p-5 flex flex-col flex-1 justify-between gap-4">
-                <div className="space-y-2.5">
+              <div className="p-3.5 flex flex-col flex-1 justify-between gap-3">
+                <div className="space-y-2">
                   {/* 날짜 메타데이터 */}
-                  <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                    <Calendar className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                    <Calendar className="w-3 h-3" />
                     <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
-                    {post.category && (
-                      <>
-                        <span>•</span>
-                        <span className="text-slate-400">{post.category}</span>
-                      </>
-                    )}
                   </div>
 
                   {/* 제목 */}
-                  <h3 className="text-base font-bold text-slate-100 group-hover:text-indigo-400 transition-colors line-clamp-2 leading-snug">
+                  <h3 className="text-sm font-bold text-slate-100 group-hover:text-indigo-400 transition-colors line-clamp-2 leading-snug">
                     {post.title}
                   </h3>
 
                   {/* 150자 요약 본문 */}
-                  <p className="text-xs sm:text-sm text-slate-300/90 line-clamp-3 leading-relaxed">
+                  <p className="text-xs text-slate-400 line-clamp-3 leading-relaxed">
                     {post.summary}
                   </p>
                 </div>
 
                 {/* dofollow 백링크 버튼 */}
-                <div className="pt-3 border-t border-slate-800/80">
+                <div className="pt-2.5 border-t border-slate-800/80">
                   <a
                     href={post.original_url}
                     target="_blank"
                     rel="dofollow"
-                    className="inline-flex items-center justify-between w-full px-3.5 py-2 text-xs sm:text-sm font-medium text-indigo-300 bg-indigo-950/40 hover:bg-indigo-600 hover:text-white border border-indigo-800/50 rounded-xl transition-all group/btn"
+                    className="inline-flex items-center justify-between w-full px-3 py-1.5 text-xs font-medium text-indigo-300 bg-indigo-950/40 hover:bg-indigo-600 hover:text-white border border-indigo-800/50 rounded-lg transition-all group/btn"
                     title={`${post.blog_name} 원본 글 보러 가기`}
                   >
                     <span>원문 보러 가기</span>
-                    <ExternalLink className="w-4 h-4 text-indigo-400 group-hover/btn:text-white group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                    <ExternalLink className="w-3.5 h-3.5 text-indigo-400 group-hover/btn:text-white group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
                   </a>
                 </div>
               </div>
@@ -230,12 +224,12 @@ export default function PostListWithFilter({ initialPosts }: Props) {
         </div>
       )}
 
-      {/* 더보기 버튼 (남은 포스트가 있을 때 표시) */}
+      {/* 더보기 버튼 */}
       {visiblePosts.length < filteredPosts.length && (
         <div className="flex justify-center pt-4">
           <button
             onClick={handleLoadMore}
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500/50 rounded-xl transition-all shadow-md cursor-pointer hover:shadow-indigo-500/10"
+            className="inline-flex items-center gap-2 px-6 py-2.5 text-xs sm:text-sm font-semibold text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500/50 rounded-xl transition-all shadow-md cursor-pointer hover:shadow-indigo-500/10"
           >
             <span>더 많은 포스팅 보기 ({visiblePosts.length} / {filteredPosts.length})</span>
             <ChevronDown className="w-4 h-4 text-indigo-400" />

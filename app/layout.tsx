@@ -31,7 +31,7 @@ export default function RootLayout({
     <html lang="ko" className="dark">
       <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
         <header className="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 text-white font-bold text-lg">
                 B
@@ -50,12 +50,12 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="flex-1 max-w-[1700px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {children}
         </main>
 
         <footer className="border-t border-slate-800/80 bg-slate-950/50 py-8 text-center text-xs text-slate-500">
-          <div className="max-w-7xl mx-auto px-4">
+          <div className="max-w-[1700px] mx-auto px-4">
             <p className="mb-2">
               본 사이트는 블로그 RSS 피드를 자동 수집하여 150자 요약과 원문 백링크(dofollow)를 제공합니다.
             </p>

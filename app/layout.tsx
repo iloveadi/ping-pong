@@ -16,6 +16,14 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
+  verification: {
+    other: {
+      'naver-site-verification': 'dbffbb79f2d90d1b5c30946946627df41bba41d2',
+    },
+  },
+  other: {
+    'naver-site-verification': 'dbffbb79f2d90d1b5c30946946627df41bba41d2',
+  },
   openGraph: {
     title: '핑퐁허브 (PingPong Hub) | 엄선된 블로그 & 라이프 큐레이션',
     description: '생산성 도구, 자동차 라이프, 마음 치유 에세이 등 유익한 아티클을 한곳에서 만나보세요.',

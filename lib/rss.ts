@@ -25,6 +25,13 @@ export const DEFAULT_FEEDS: FeedSource[] = [
     category: 'Mind & Essay',
     isActive: true,
   },
+  {
+    id: 'wp-pechamarket',
+    name: '폐차마켓',
+    url: 'http://pechamarket.co.kr/feed/',
+    category: 'Auto & Market',
+    isActive: true,
+  },
 ];
 
 // fallback 기본 썸네일 목록

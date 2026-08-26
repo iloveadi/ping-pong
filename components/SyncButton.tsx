@@ -7,48 +7,59 @@ import { RefreshCw, CheckCircle, AlertCircle, Lock, X } from 'lucide-react';
 export default function SyncButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const router = useRouter();
 
   const handleOpenModal = () => {
     setPassword('');
-    setPasswordError(false);
+    setPasswordError(null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setPassword('');
-    setPasswordError(false);
+    setPasswordError(null);
   };
 
   const handleConfirmSync = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // 관리자 비밀번호 검증 (1212)
-    if (password !== '1212') {
-      setPasswordError(true);
+    if (!password) {
+      setPasswordError('비밀번호를 입력하세요.');
       return;
     }
 
-    setIsModalOpen(false);
     setLoading(true);
-    setStatusMessage(null);
+    setPasswordError(null);
 
     try {
-      const res = await fetch('/api/cron');
+      // 서버로 비밀번호 전달하여 백엔드에서만 검증 (브라우저 소스보기로 비밀번호 파악 원천 차단)
+      const res = await fetch('/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+
       const data = await res.json();
 
+      if (res.status === 401) {
+        setPasswordError('비밀번호가 올바르지 않습니다.');
+        setLoading(false);
+        return;
+      }
+
       if (res.ok && data.success) {
+        setIsModalOpen(false);
+        setPassword('');
         setStatusMessage(`동기화 완료 (+${data.stats?.savedCount ?? 0}건)`);
         router.refresh();
       } else {
-        setStatusMessage(data.message || '동기화 실패');
+        setPasswordError(data.message || '동기화 중 오류가 발생했습니다.');
       }
     } catch {
-      setStatusMessage('요청 오류');
+      setPasswordError('서버 연결 실패');
     } finally {
       setLoading(false);
       setTimeout(() => {
@@ -94,6 +105,7 @@ export default function SyncButton() {
               </div>
               <button
                 onClick={handleCloseModal}
+                disabled={loading}
                 className="text-slate-400 hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -111,15 +123,16 @@ export default function SyncButton() {
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
-                    setPasswordError(false);
+                    setPasswordError(null);
                   }}
                   placeholder="비밀번호 입력"
                   autoFocus
-                  className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all text-center tracking-widest font-mono text-base"
+                  disabled={loading}
+                  className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all text-center tracking-widest font-mono text-base disabled:opacity-50"
                 />
                 {passwordError && (
                   <span className="block mt-1.5 text-[11px] text-rose-400 text-center">
-                    비밀번호가 올바르지 않습니다.
+                    {passwordError}
                   </span>
                 )}
               </div>
@@ -128,15 +141,24 @@ export default function SyncButton() {
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="flex-1 py-2 text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl transition-all cursor-pointer"
+                  disabled={loading}
+                  className="flex-1 py-2 text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl transition-all cursor-pointer disabled:opacity-50"
                 >
                   취소
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+                  disabled={loading}
+                  className="flex-1 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-md shadow-indigo-600/30 cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5"
                 >
-                  실행
+                  {loading ? (
+                    <>
+                      <RefreshCw className="w-3 h-3 animate-spin" />
+                      <span>검증 중...</span>
+                    </>
+                  ) : (
+                    <span>실행</span>
+                  )}
                 </button>
               </div>
             </form>

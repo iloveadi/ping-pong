@@ -2,41 +2,20 @@ import Parser from 'rss-parser';
 import * as cheerio from 'cheerio';
 import { FeedSource, ParsedPost } from './types';
 
-// 기본 수집 대상 타겟 RSS 피드 목록 (국내외 주요 기술/트렌드/비즈니스 블로그 예시)
+// 타겟 블로그 RSS 피드 목록 (네이버 블로그 공식 RSS 피드)
 export const DEFAULT_FEEDS: FeedSource[] = [
   {
-    id: 'toss-tech',
-    name: '토스 기술 블로그',
-    url: 'https://toss.tech/rss.xml',
-    category: 'Tech & Finance',
+    id: 'naver-desktools',
+    name: 'Desktools 블로그',
+    url: 'https://rss.blog.naver.com/desktools.xml',
+    category: 'Desk Tools',
     isActive: true,
   },
   {
-    id: 'woowahan',
-    name: '우아한형제들 기술블로그',
-    url: 'https://techblog.woowahan.com/feed/',
-    category: 'Engineering',
-    isActive: true,
-  },
-  {
-    id: 'kakao-tech',
-    name: '카카오 테크',
-    url: 'https://tech.kakao.com/feed/',
-    category: 'Technology',
-    isActive: true,
-  },
-  {
-    id: 'geeknews',
-    name: 'GeekNews',
-    url: 'https://news.hada.io/rss/news',
-    category: 'Tech Trends',
-    isActive: true,
-  },
-  {
-    id: 'medium-javascript',
-    name: 'JavaScript in Plain English',
-    url: 'https://medium.com/feed/javascript-in-plain-english',
-    category: 'Development',
+    id: 'naver-clpecha',
+    name: 'Clpecha 블로그',
+    url: 'https://rss.blog.naver.com/clpecha.xml',
+    category: 'Lifestyle & Tech',
     isActive: true,
   },
 ];

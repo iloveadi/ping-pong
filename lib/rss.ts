@@ -20,7 +20,7 @@ export const DEFAULT_FEEDS: FeedSource[] = [
   },
   {
     id: 'naver-mind-archive',
-    name: '마인드아카이브',
+    name: '마음 산책',
     url: 'https://rss.blog.naver.com/mind-archive.xml',
     category: 'Mind & Essay',
     isActive: true,

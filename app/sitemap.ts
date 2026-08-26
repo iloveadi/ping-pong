@@ -1,11 +1,9 @@
 import { MetadataRoute } from 'next';
-import { getPosts } from '@/lib/db';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ping-pong.vercel.app';
-  const posts = await getPosts(2000);
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://moa.quest';
 
-  const staticRoutes: MetadataRoute.Sitemap = [
+  return [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -13,6 +11,4 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
   ];
-
-  return staticRoutes;
 }

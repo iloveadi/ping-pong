@@ -2,32 +2,32 @@ import Parser from 'rss-parser';
 import * as cheerio from 'cheerio';
 import { FeedSource, ParsedPost } from './types';
 
-// 타겟 블로그 RSS 피드 목록 (네이버 블로그 공식 RSS 피드)
+// 타겟 블로그 RSS 피드 목록 (네이버 블로그 및 워드프레스 공식 피드)
 export const DEFAULT_FEEDS: FeedSource[] = [
   {
     id: 'naver-desktools',
-    name: 'Desktools 블로그',
+    name: '[NB]Desktools',
     url: 'https://rss.blog.naver.com/desktools.xml',
     category: 'Desk Tools',
     isActive: true,
   },
   {
     id: 'naver-clpecha',
-    name: 'Clpecha 블로그',
+    name: '[NB]clpecha',
     url: 'https://rss.blog.naver.com/clpecha.xml',
     category: 'Lifestyle & Tech',
     isActive: true,
   },
   {
     id: 'naver-mind-archive',
-    name: '마음 산책',
+    name: '[NB]마음산책',
     url: 'https://rss.blog.naver.com/mind-archive.xml',
     category: 'Mind & Essay',
     isActive: true,
   },
   {
     id: 'wp-pechamarket',
-    name: '폐차마켓',
+    name: '[WP]폐차마켓',
     url: 'http://pechamarket.co.kr/feed/',
     category: 'Auto & Market',
     isActive: true,

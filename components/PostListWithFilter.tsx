@@ -22,6 +22,8 @@ function formatDate(dateStr: string): string {
   }
 }
 
+const ORDERED_TAB_KEYS = ['[NB]Desktools', '[NB]clpecha', '[NB]마음산책', '[WP]폐차마켓'];
+
 export default function PostListWithFilter({ initialPosts }: Props) {
   const [selectedBlog, setSelectedBlog] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -37,7 +39,16 @@ export default function PostListWithFilter({ initialPosts }: Props) {
   }, [initialPosts]);
 
   const blogNames = useMemo(() => {
-    return Object.keys(blogStats);
+    const rawKeys = Object.keys(blogStats);
+    // 지정된 순서대로 정렬하고, 혹시 추가된 기타 블로그는 뒤에 배치
+    return rawKeys.sort((a, b) => {
+      const idxA = ORDERED_TAB_KEYS.indexOf(a);
+      const idxB = ORDERED_TAB_KEYS.indexOf(b);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a.localeCompare(b);
+    });
   }, [blogStats]);
 
   // 필터링 및 검색 적용된 포스트 목록
@@ -86,7 +97,7 @@ export default function PostListWithFilter({ initialPosts }: Props) {
                 : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-700/50'
             }`}
           >
-            <span>전체 블로그</span>
+            <span>전체보기</span>
             <span
               className={`px-1.5 py-0.5 rounded-full text-[10px] ${
                 selectedBlog === 'ALL' ? 'bg-indigo-700 text-white' : 'bg-slate-700 text-slate-300'
@@ -139,7 +150,7 @@ export default function PostListWithFilter({ initialPosts }: Props) {
         <div className="flex items-center gap-2">
           <Filter className="w-3.5 h-3.5 text-indigo-400" />
           <span>
-            {selectedBlog === 'ALL' ? '전체 블로그' : selectedBlog} 결과: <strong>{filteredPosts.length}건</strong>
+            {selectedBlog === 'ALL' ? '전체보기' : selectedBlog} 결과: <strong>{filteredPosts.length}건</strong>
           </span>
           {searchQuery && (
             <span className="text-indigo-400">(&apos;{searchQuery}&apos; 검색됨)</span>

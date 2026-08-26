@@ -1,6 +1,5 @@
 import { getPosts, savePosts } from '@/lib/db';
 import { fetchAllFeeds, DEFAULT_FEEDS } from '@/lib/rss';
-import SyncButton from '@/components/SyncButton';
 import PostListWithFilter from '@/components/PostListWithFilter';
 import { Layers, BookOpen, Rss } from 'lucide-react';
 
@@ -58,17 +57,22 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="flex flex-col items-start md:items-end gap-3 shrink-0">
-            <SyncButton />
-            <div className="text-xs text-slate-400 flex items-center gap-4">
-              <span className="flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-indigo-400" />
-                큐레이션 채널 <strong>{DEFAULT_FEEDS.length}개</strong>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
-                등록 아티클 <strong>{posts.length}개</strong>
-              </span>
+          {/* 우측 지표 통계 배너 */}
+          <div className="flex items-center gap-3 bg-slate-900/90 border border-slate-800/80 px-5 py-4 rounded-2xl shadow-inner shrink-0">
+            <div className="flex items-center gap-6 text-xs text-slate-300">
+              <div className="space-y-1">
+                <span className="text-[11px] text-slate-400 block flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-indigo-400" /> 큐레이션 채널
+                </span>
+                <strong className="text-base text-white font-bold">{DEFAULT_FEEDS.length}개</strong>
+              </div>
+              <div className="w-[1px] h-8 bg-slate-800"></div>
+              <div className="space-y-1">
+                <span className="text-[11px] text-slate-400 block flex items-center gap-1.5">
+                  <BookOpen className="w-3.5 h-3.5 text-indigo-400" /> 등록 아티클
+                </span>
+                <strong className="text-base text-white font-bold">{posts.length}개</strong>
+              </div>
             </div>
           </div>
         </div>

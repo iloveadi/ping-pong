@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import SyncButton from '@/components/SyncButton';
 
 export const metadata: Metadata = {
   title: '핑퐁허브 (PingPong Hub) | 엄선된 블로그 & 라이프 큐레이션',
@@ -55,11 +56,14 @@ export default function RootLayout({
         </main>
 
         <footer className="border-t border-slate-800/80 bg-slate-950/50 py-8 text-center text-xs text-slate-500">
-          <div className="max-w-[1700px] mx-auto px-4">
-            <p className="mb-2">
+          <div className="max-w-[1700px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-left text-slate-500">
               핑퐁허브는 다양한 분야의 전문 블로그 포스팅을 엄선하여 핵심 요약과 공식 원문 링크를 제공합니다.
+              <span className="block mt-1 text-slate-600">© {new Date().getFullYear()} PingPong Hub. All rights reserved.</span>
             </p>
-            <p>© {new Date().getFullYear()} PingPong Hub. All rights reserved.</p>
+            <div className="shrink-0 flex items-center gap-3">
+              <SyncButton />
+            </div>
           </div>
         </footer>
       </body>

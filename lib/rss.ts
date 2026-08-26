@@ -18,6 +18,13 @@ export const DEFAULT_FEEDS: FeedSource[] = [
     category: 'Lifestyle & Tech',
     isActive: true,
   },
+  {
+    id: 'naver-mind-archive',
+    name: '마인드아카이브',
+    url: 'https://rss.blog.naver.com/mind-archive.xml',
+    category: 'Mind & Essay',
+    isActive: true,
+  },
 ];
 
 // fallback 기본 썸네일 목록

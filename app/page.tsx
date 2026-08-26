@@ -26,14 +26,14 @@ function formatDate(dateStr: string): string {
 
 export default async function HomePage() {
   // 1. DB에서 포스트 목록 조회 (RSC)
-  let posts = await getPosts(1000);
+  let posts = await getPosts(2000);
 
   // 만약 첫 실행이어서 DB가 비어있다면, 사용자 편의를 위해 즉시 초기 수집 1회 실행
   if (posts.length === 0) {
     try {
       const initialPosts = await fetchAllFeeds(DEFAULT_FEEDS);
       await savePosts(initialPosts);
-      posts = await getPosts(1000);
+      posts = await getPosts(2000);
     } catch (e) {
       console.error('초기 포스트 수집 오류:', e);
     }

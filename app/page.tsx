@@ -1,42 +1,26 @@
-import { getPosts, savePosts } from '@/lib/db';
-import { fetchAllFeeds, DEFAULT_FEEDS } from '@/lib/rss';
+import { getPosts, seedLocalPostsToSupabase } from '@/lib/db';
 import PostListWithFilter from '@/components/PostListWithFilter';
 import { Layers, BookOpen, Rss } from 'lucide-react';
+import { DEFAULT_FEEDS } from '@/lib/rss';
 
-// 서버 컴포넌트 캐싱 옵션 (ISR 60초 주기 또는 Cron 트리거 시 revalidate)
+// 서버 컴포넌트 캐싱 옵션 (ISR 60초 주기)
 export const revalidate = 60;
-
-/**
- * 날짜 포맷팅 헬퍼
- */
-function formatDate(dateStr: string): string {
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return dateStr;
-    return new Intl.DateTimeFormat('ko-KR', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }).format(d);
-  } catch {
-    return dateStr;
-  }
-}
 
 export default async function HomePage() {
   // 1. DB에서 포스트 목록 조회 (RSC)
   let posts = await getPosts(2000);
 
-  // 만약 첫 실행이어서 DB가 비어있다면, 사용자 편의를 위해 즉시 초기 수집 1회 실행
-  if (posts.length === 0) {
+  // Supabase에 과거 전체 데이터(1028건)가 아직 적재되지 않은 경우 자동 일괄 마이그레이션 1회 실행
+  if (posts.length < 100) {
     try {
-      const initialPosts = await fetchAllFeeds(DEFAULT_FEEDS);
-      await savePosts(initialPosts);
+      console.log(`[Init] DB 포스트 수가 ${posts.length}건이므로 과거 전체 아티클 마이그레이션을 실행합니다.`);
+      await seedLocalPostsToSupabase();
       posts = await getPosts(2000);
     } catch (e) {
-      console.error('초기 포스트 수집 오류:', e);
+      console.error('초기 과거 포스트 마이그레이션 오류:', e);
     }
   }
+
 
   return (
     <div className="space-y-10">

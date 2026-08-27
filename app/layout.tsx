@@ -61,10 +61,7 @@ export default function RootLayout({
                 <span className="font-extrabold text-lg text-white tracking-tight group-hover:text-indigo-300 transition-colors">
                   핑퐁허브
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-indigo-500/15 to-purple-500/15 text-indigo-300 border border-indigo-500/30 font-medium">
-                  <Sparkles className="w-3 h-3 text-indigo-400" />
-                  <span>PingPong Hub</span>
-                </span>
+                <SyncButton />
               </div>
             </div>
 

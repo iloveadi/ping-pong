@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { RefreshCw, CheckCircle, AlertCircle, Lock, X } from 'lucide-react';
+import { Sparkles, RefreshCw, CheckCircle, AlertCircle, Lock, X } from 'lucide-react';
 
 export default function SyncButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,7 +9,6 @@ export default function SyncButton() {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
-  const router = useRouter();
 
   const handleOpenModal = () => {
     setPassword('');
@@ -35,7 +33,7 @@ export default function SyncButton() {
     setPasswordError(null);
 
     try {
-      // 서버로 비밀번호 전달하여 백엔드에서만 검증 (브라우저 소스보기로 비밀번호 파악 원천 차단)
+      // 서버로 비밀번호 전달하여 백엔드에서만 검증
       const res = await fetch('/api/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -54,7 +52,10 @@ export default function SyncButton() {
         setIsModalOpen(false);
         setPassword('');
         setStatusMessage(`동기화 완료 (+${data.stats?.savedCount ?? 0}건)`);
-        router.refresh();
+        // DB 최신 데이터 즉시 반영을 위해 페이지 전체 리로드
+        setTimeout(() => {
+          window.location.reload();
+        }, 800);
       } else {
         setPasswordError(data.message || '동기화 중 오류가 발생했습니다.');
       }
@@ -71,19 +72,23 @@ export default function SyncButton() {
   return (
     <>
       <div className="inline-flex items-center gap-2">
+        {/* PingPong Hub 알약형 뱃지 스타일의 피드 동기화 버튼 */}
         <button
           onClick={handleOpenModal}
           disabled={loading}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:text-slate-300 bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 rounded-lg transition-all cursor-pointer disabled:opacity-50"
-          title="관리자 피드 즉시 동기화"
+          className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-indigo-500/15 to-purple-500/15 hover:from-indigo-500/25 hover:to-purple-500/25 text-indigo-300 hover:text-indigo-200 border border-indigo-500/30 hover:border-indigo-500/50 font-medium transition-all cursor-pointer shadow-sm active:scale-95 disabled:opacity-50"
+          title="관리자 피드 동기화 (클릭)"
         >
-          <Lock className="w-3 h-3 text-slate-500" />
-          <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin text-indigo-400' : ''}`} />
-          <span>{loading ? '동기화 중...' : '피드 동기화'}</span>
+          {loading ? (
+            <RefreshCw className="w-3 h-3 text-indigo-400 animate-spin" />
+          ) : (
+            <Sparkles className="w-3 h-3 text-indigo-400 transition-transform group-hover:rotate-12" />
+          )}
+          <span>PingPong Hub</span>
         </button>
 
         {statusMessage && (
-          <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 animate-fadeIn">
+          <span className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800/90 text-slate-200 border border-slate-700 animate-fadeIn shadow-lg">
             {statusMessage.includes('완료') ? (
               <CheckCircle className="w-3 h-3 text-emerald-400" />
             ) : (
@@ -113,7 +118,7 @@ export default function SyncButton() {
             </div>
 
             <p className="text-xs text-slate-400">
-              피드 동기화를 실행하려면 비밀번호를 입력하세요.
+              피드 동기화를 실행하려면 관리자 비밀번호를 입력하세요.
             </p>
 
             <form onSubmit={handleConfirmSync} className="space-y-3">
@@ -154,7 +159,7 @@ export default function SyncButton() {
                   {loading ? (
                     <>
                       <RefreshCw className="w-3 h-3 animate-spin" />
-                      <span>검증 중...</span>
+                      <span>동기화 중...</span>
                     </>
                   ) : (
                     <span>실행</span>
@@ -168,3 +173,4 @@ export default function SyncButton() {
     </>
   );
 }
+

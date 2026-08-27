@@ -24,26 +24,62 @@ function formatDate(dateStr: string): string {
 
 const ORDERED_TAB_KEYS = ['Desktools.run 블로그', '폐차마켓 블로그', '마음산책', '폐차마켓'];
 
+// 보색 대비(Complementary Palette) 블로그 시그니처 테마
 function getBlogTheme(blogName: string) {
   if (blogName.includes('Desktools')) {
-    return { badge: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20', dot: 'bg-emerald-400', hover: 'group-hover:text-emerald-300', activeBg: 'from-emerald-500 to-teal-500' };
+    return {
+      badge: 'text-emerald-300 bg-emerald-950/90 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.25)]',
+      dot: 'bg-emerald-400',
+      hover: 'group-hover:text-emerald-300',
+      activeBg: 'from-emerald-600 via-teal-600 to-cyan-600 text-white shadow-emerald-500/30',
+      btnHover: 'hover:bg-emerald-500/20 hover:border-emerald-500/50 hover:text-emerald-200',
+      accentGlow: 'rgba(16, 185, 129, 0.3)',
+    };
   }
   if (blogName === '폐차마켓 블로그') {
-    return { badge: 'text-amber-400 bg-amber-500/10 border-amber-500/20', dot: 'bg-amber-400', hover: 'group-hover:text-amber-300', activeBg: 'from-amber-500 to-orange-500' };
+    return {
+      badge: 'text-amber-300 bg-amber-950/90 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.25)]',
+      dot: 'bg-amber-400',
+      hover: 'group-hover:text-amber-300',
+      activeBg: 'from-amber-500 via-orange-600 to-amber-700 text-white shadow-amber-500/30',
+      btnHover: 'hover:bg-amber-500/20 hover:border-amber-500/50 hover:text-amber-200',
+      accentGlow: 'rgba(245, 158, 11, 0.3)',
+    };
   }
   if (blogName.includes('마음')) {
-    return { badge: 'text-rose-400 bg-rose-500/10 border-rose-500/20', dot: 'bg-rose-400', hover: 'group-hover:text-rose-300', activeBg: 'from-rose-500 to-pink-500' };
+    return {
+      badge: 'text-rose-300 bg-rose-950/90 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)]',
+      dot: 'bg-rose-400',
+      hover: 'group-hover:text-rose-300',
+      activeBg: 'from-rose-500 via-pink-600 to-purple-600 text-white shadow-rose-500/30',
+      btnHover: 'hover:bg-rose-500/20 hover:border-rose-500/50 hover:text-rose-200',
+      accentGlow: 'rgba(244, 63, 94, 0.3)',
+    };
   }
   if (blogName === '폐차마켓') {
-    return { badge: 'text-sky-400 bg-sky-500/10 border-sky-500/20', dot: 'bg-sky-400', hover: 'group-hover:text-sky-300', activeBg: 'from-sky-500 to-blue-500' };
+    return {
+      badge: 'text-sky-300 bg-sky-950/90 border-sky-500/40 shadow-[0_0_12px_rgba(56,189,248,0.25)]',
+      dot: 'bg-sky-400',
+      hover: 'group-hover:text-sky-300',
+      activeBg: 'from-sky-500 via-blue-600 to-indigo-600 text-white shadow-sky-500/30',
+      btnHover: 'hover:bg-sky-500/20 hover:border-sky-500/50 hover:text-sky-200',
+      accentGlow: 'rgba(56, 189, 248, 0.3)',
+    };
   }
-  return { badge: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20', dot: 'bg-indigo-400', hover: 'group-hover:text-indigo-300', activeBg: 'from-indigo-500 to-purple-500' };
+  return {
+    badge: 'text-indigo-300 bg-indigo-950/90 border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.25)]',
+    dot: 'bg-indigo-400',
+    hover: 'group-hover:text-indigo-300',
+    activeBg: 'from-indigo-600 via-purple-600 to-pink-600 text-white shadow-indigo-500/30',
+    btnHover: 'hover:bg-indigo-500/20 hover:border-indigo-500/50 hover:text-indigo-200',
+    accentGlow: 'rgba(99, 102, 241, 0.3)',
+  };
 }
 
 export default function PostListWithFilter({ initialPosts }: Props) {
   const [selectedBlog, setSelectedBlog] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [visibleCount, setVisibleCount] = useState<number>(15);
+  const [visibleCount, setVisibleCount] = useState<number>(16);
 
   const blogStats = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -80,32 +116,32 @@ export default function PostListWithFilter({ initialPosts }: Props) {
 
   const handleSelectBlog = (blog: string) => {
     setSelectedBlog(blog);
-    setVisibleCount(15);
+    setVisibleCount(16);
   };
 
   return (
-    <section className="space-y-5">
+    <section className="space-y-6">
 
-      {/* ── 필터 & 검색 바 ── */}
-      <div className="glass rounded-2xl p-3 flex flex-col lg:flex-row lg:items-center gap-3">
+      {/* ── 필터 & 검색 바 (Glass Control Bar with High Contrast) ── */}
+      <div className="glass rounded-2xl p-3.5 sm:p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
 
         {/* 탭 목록 */}
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none flex-1">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none flex-1 pb-1 lg:pb-0">
           {/* 전체 탭 */}
           <button
             onClick={() => handleSelectBlog('ALL')}
-            className={`tab-btn ${selectedBlog === 'ALL' ? 'active' : ''}`}
+            className={`tab-btn ${selectedBlog === 'ALL' ? 'active-all' : ''}`}
           >
             <span>전체보기</span>
-            <span className={`px-1.5 py-0.5 rounded-md text-[10px] font-bold ${
-              selectedBlog === 'ALL' ? 'bg-white/20 text-white' : 'bg-white/[0.06] text-slate-500'
+            <span className={`px-2 py-0.5 rounded-full text-[10.5px] font-extrabold ${
+              selectedBlog === 'ALL' ? 'bg-white/25 text-white' : 'bg-white/[0.08] text-slate-400'
             }`}>
               {initialPosts.length.toLocaleString()}
             </span>
           </button>
 
           {/* 구분선 */}
-          <div className="w-px h-5 bg-white/[0.08] mx-1 shrink-0" />
+          <div className="w-px h-6 bg-white/[0.1] mx-1 shrink-0" />
 
           {/* 블로그별 탭 */}
           {blogNames.map((name) => {
@@ -115,12 +151,12 @@ export default function PostListWithFilter({ initialPosts }: Props) {
               <button
                 key={name}
                 onClick={() => handleSelectBlog(name)}
-                className={`tab-btn ${isSelected ? `active bg-gradient-to-r ${theme.activeBg}` : ''}`}
+                className={`tab-btn ${isSelected ? `bg-gradient-to-r ${theme.activeBg} ring-1 ring-white/30` : ''}`}
               >
-                {!isSelected && <span className={`w-1.5 h-1.5 rounded-full ${theme.dot} opacity-70`} />}
+                {!isSelected && <span className={`w-2 h-2 rounded-full ${theme.dot} shadow-[0_0_6px_currentColor]`} />}
                 <span>{name}</span>
-                <span className={`px-1.5 py-0.5 rounded-md text-[10px] font-bold ${
-                  isSelected ? 'bg-white/20 text-white' : 'bg-white/[0.06] text-slate-500'
+                <span className={`px-2 py-0.5 rounded-full text-[10.5px] font-extrabold ${
+                  isSelected ? 'bg-white/25 text-white' : 'bg-white/[0.08] text-slate-400'
                 }`}>
                   {blogStats[name] || 0}
                 </span>
@@ -130,62 +166,61 @@ export default function PostListWithFilter({ initialPosts }: Props) {
         </div>
 
         {/* 검색창 */}
-        <div className="relative w-full lg:w-72 shrink-0">
-          <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+        <div className="relative w-full lg:w-80 shrink-0">
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(15); }}
-            placeholder="제목·내용 검색..."
-            className="w-full pl-9 pr-8 py-2 text-xs bg-white/[0.04] border border-white/[0.08] rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.06] focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(16); }}
+            placeholder="제목 및 본문 실시간 검색..."
+            className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm bg-slate-950/80 border border-white/[0.12] rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400/80 focus:ring-2 focus:ring-amber-400/20 transition-all backdrop-blur-md"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-4 h-4" />
             </button>
           )}
         </div>
       </div>
 
       {/* ── 상태 표시줄 ── */}
-      <div className="flex items-center justify-between px-0.5">
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <SlidersHorizontal className="w-3 h-3 text-slate-600" />
+      <div className="flex items-center justify-between px-1 text-xs">
+        <div className="flex items-center gap-2 text-slate-400">
+          <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400" />
           <span>
-            {selectedBlog === 'ALL' ? '전체' : selectedBlog}
-            {' · '}
-            <strong className="text-slate-300 font-semibold">{filteredPosts.length.toLocaleString()}건</strong>
+            {selectedBlog === 'ALL' ? '전체' : selectedBlog} 결과:
+            <strong className="text-white font-bold ml-1.5">{filteredPosts.length.toLocaleString()}건</strong>
           </span>
           {searchQuery && (
-            <span className="px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-medium">
-              &ldquo;{searchQuery}&rdquo;
+            <span className="px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-semibold">
+              &lsquo;{searchQuery}&rsquo; 검색됨
             </span>
           )}
         </div>
-        <span className="hidden sm:inline text-[10px] text-slate-700">
-          * 핵심 요약 150자, 원문 링크 포함
+        <span className="hidden sm:inline text-[11px] text-slate-500">
+          * 150자 핵심 요약 &amp; 공식 원문 다이렉트 링크 제공
         </span>
       </div>
 
-      {/* ── 포스트 그리드 ── */}
+      {/* ── 4열 포스트 그리드 (보색 대비 & 뛰어난 가독성) ── */}
       {filteredPosts.length === 0 ? (
         <div className="text-center py-28 glass rounded-3xl">
-          <p className="text-slate-500 text-sm">조건에 맞는 포스팅이 없습니다.</p>
+          <p className="text-slate-400 text-sm">조건에 맞는 포스팅이 없습니다.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
           {visiblePosts.map((post) => {
             const theme = getBlogTheme(post.blog_name);
             return (
               <article
                 key={post.id || post.original_url}
-                className="post-card group flex flex-col rounded-2xl overflow-hidden"
+                className="post-card group flex flex-col rounded-2xl overflow-hidden shadow-lg"
               >
-                {/* 썸네일 */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950/80">
+                {/* 썸네일 영역 */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950">
                   {post.thumbnail_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -193,51 +228,58 @@ export default function PostListWithFilter({ initialPosts }: Props) {
                       alt={post.title}
                       loading="lazy"
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <BookOpen className="w-7 h-7 text-slate-700 stroke-1" />
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900 to-indigo-950/50">
+                      <BookOpen className="w-8 h-8 text-indigo-400/60 stroke-1" />
                     </div>
                   )}
-                  {/* 그라디언트 오버레이 */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                  {/* 블로그 뱃지 - 우측 하단 */}
-                  <span className={`absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md text-[10px] font-semibold border backdrop-blur-sm ${theme.badge}`}>
-                    {post.blog_name}
-                  </span>
+                  {/* 하단 그라디언트 섀도우 (뱃지 가독성 강화) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+
+                  {/* 블로그 뱃지 - 우측 하단 (고대비 보색 & 블러 박스) */}
+                  <div className="absolute bottom-2.5 right-2.5">
+                    <span className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border backdrop-blur-md shadow-md ${theme.badge}`}>
+                      {post.blog_name}
+                    </span>
+                  </div>
                 </div>
 
-                {/* 콘텐츠 */}
-                <div className="p-3.5 flex flex-col flex-1 gap-2.5">
-                  {/* 날짜 */}
-                  <div className="flex items-center gap-1 text-[10px] text-slate-600 font-medium">
-                    <Calendar className="w-2.5 h-2.5" />
-                    <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
+                {/* 콘텐츠 영역 */}
+                <div className="p-4 flex flex-col flex-1 justify-between gap-3">
+                  <div className="space-y-2">
+                    {/* 날짜 메타 */}
+                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
+                      <Calendar className="w-3 h-3 text-amber-400/80" />
+                      <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
+                    </div>
+
+                    {/* 제목 (가독성 극대화: 14.5px, Bold, Hover시 블로그 보색 반응) */}
+                    <h3 className={`text-[14.5px] font-extrabold text-slate-100 leading-snug tracking-tight ${theme.hover} transition-colors line-clamp-2`}>
+                      {post.title}
+                    </h3>
+
+                    {/* 150자 요약 본문 */}
+                    <p className="text-[12px] text-slate-400 line-clamp-3 leading-relaxed font-normal">
+                      {post.summary}
+                    </p>
                   </div>
 
-                  {/* 제목 */}
-                  <h3 className={`text-[13px] font-bold text-slate-100 line-clamp-2 leading-snug tracking-tight ${theme.hover} transition-colors`}>
-                    {post.title}
-                  </h3>
-
-                  {/* 요약 */}
-                  <p className="text-[11px] text-slate-500 line-clamp-3 leading-relaxed flex-1">
-                    {post.summary}
-                  </p>
-
-                  {/* 원문 링크 */}
-                  <a
-                    href={post.original_url}
-                    target="_blank"
-                    rel="dofollow"
-                    className="mt-auto flex items-center justify-between w-full px-3 py-2 text-[11px] font-semibold rounded-xl border border-white/[0.07] bg-white/[0.03] hover:bg-indigo-500/15 hover:border-indigo-500/30 text-slate-500 hover:text-indigo-300 transition-all group/btn"
-                    title={`${post.blog_name} 원본 보러 가기`}
-                  >
-                    <span>원문 보러 가기</span>
-                    <ExternalLink className="w-3 h-3 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                  </a>
+                  {/* 원문 링크 버튼 (보색 네온 인터랙션) */}
+                  <div className="pt-2.5 border-t border-white/[0.07]">
+                    <a
+                      href={post.original_url}
+                      target="_blank"
+                      rel="dofollow"
+                      className={`flex items-center justify-between w-full px-3.5 py-2.5 text-xs font-bold rounded-xl border border-white/[0.1] bg-white/[0.04] text-slate-200 ${theme.btnHover} transition-all duration-200 group/btn shadow-sm`}
+                      title={`${post.blog_name} 공식 원본 글 보러 가기`}
+                    >
+                      <span>원문 보러 가기</span>
+                      <ExternalLink className="w-3.5 h-3.5 text-amber-400 group-hover/btn:text-white group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                    </a>
+                  </div>
                 </div>
               </article>
             );
@@ -245,15 +287,15 @@ export default function PostListWithFilter({ initialPosts }: Props) {
         </div>
       )}
 
-      {/* ── 더보기 ── */}
+      {/* ── 더보기 버튼 ── */}
       {visiblePosts.length < filteredPosts.length && (
-        <div className="flex justify-center pt-4">
+        <div className="flex justify-center pt-6">
           <button
-            onClick={() => setVisibleCount((p) => p + 15)}
-            className="group px-8 py-3 text-xs font-semibold text-slate-400 hover:text-white glass rounded-2xl border border-white/[0.07] hover:border-indigo-500/30 hover:bg-indigo-500/10 transition-all shadow-lg cursor-pointer"
+            onClick={() => setVisibleCount((p) => p + 16)}
+            className="group px-8 py-3.5 text-xs sm:text-sm font-bold text-slate-200 hover:text-white glass rounded-2xl border border-white/[0.1] hover:border-amber-400/50 hover:bg-amber-500/10 transition-all shadow-xl cursor-pointer hover:shadow-amber-500/15 active:scale-98"
           >
-            더 보기
-            <span className="ml-2 text-slate-600 font-normal">
+            <span>더 많은 아티클 탐색하기</span>
+            <span className="ml-2 text-amber-400 font-semibold">
               ({visiblePosts.length} / {filteredPosts.length.toLocaleString()})
             </span>
           </button>

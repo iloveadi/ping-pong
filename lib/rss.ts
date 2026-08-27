@@ -110,9 +110,8 @@ export function extractThumbnail(item: any): string {
     }
   }
 
-  // 4. 추출되지 않았을 경우 안정적인 기본 이미지 반환
-  const randomFallback = FALLBACK_THUMBNAILS[Math.floor(Math.random() * FALLBACK_THUMBNAILS.length)];
-  return randomFallback;
+  // 4. 본문에 실제 이미지가 없을 경우 빈 문자열 반환 (UI에서 깔끔한 브랜드 플레이스홀더 표시)
+  return '';
 }
 
 /**

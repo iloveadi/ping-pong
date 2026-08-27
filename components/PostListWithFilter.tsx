@@ -88,9 +88,12 @@ function PostCard({ post }: { post: BlogPost }) {
   const [imgError, setImgError] = useState(false);
   const theme = getBlogTheme(post.blog_name);
 
-  // Mixed Content 방지를 위해 http:// URL을 https:// 로 자동 전환 시도
+  // 실제 블로그 이미지가 아니거나 unsplash 외부 스톡 사진인 경우 플레이스홀더로 처리
   const safeThumbnailUrl = useMemo(() => {
     if (!post.thumbnail_url) return null;
+    // 과거에 들어간 임의 Unsplash 사진은 제외하고 실제 본문 이미지만 노출
+    if (post.thumbnail_url.includes('unsplash.com')) return null;
+
     if (post.thumbnail_url.startsWith('http://')) {
       return post.thumbnail_url.replace('http://', 'https://');
     }

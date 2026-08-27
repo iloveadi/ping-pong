@@ -68,7 +68,7 @@ const TOPIC_CATEGORIES: TopicCategory[] = [
     id: 'CAR',
     name: '자동차·폐차 정보',
     icon: '🚗',
-    blogNames: ['폐차마켓 블로그', '폐차마켓'],
+    blogNames: ['폐차마켓 블로그', '폐차마켓', '폐차119'],
     gradient: 'from-amber-500 via-orange-600 to-amber-700',
     badgeStyle: 'bg-amber-950/90 text-amber-300 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.25)]',
   },
@@ -97,7 +97,7 @@ function getBlogTheme(blogName: string) {
       modalButton: 'from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-500/30',
     };
   }
-  if (blogName === '폐차마켓 블로그' || blogName === '폐차마켓') {
+  if (blogName.includes('폐차')) {
     return {
       topicName: '자동차·폐차',
       badge: 'text-amber-300 bg-amber-950/90 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.25)]',

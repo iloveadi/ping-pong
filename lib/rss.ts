@@ -32,6 +32,13 @@ export const DEFAULT_FEEDS: FeedSource[] = [
     category: 'Auto & Market',
     isActive: true,
   },
+  {
+    id: 'naver-freek22',
+    name: '폐차119',
+    url: 'https://rss.blog.naver.com/freek22.xml',
+    category: 'Auto & Market',
+    isActive: true,
+  },
 ];
 
 // fallback 기본 썸네일 목록

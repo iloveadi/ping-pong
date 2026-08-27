@@ -21,8 +21,83 @@ export default async function HomePage() {
     }
   }
 
+  // 2. Schema.org JSON-LD 구조화된 데이터 생성 (Google Rich Snippets 최적화)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': 'https://www.moa.quest/#website',
+        url: 'https://www.moa.quest',
+        name: '모아 퀘스트 (MOA.QUEST)',
+        description: '생산성 도구, 자동차 라이프, 마음 치유 에세이까지 엄선된 블로그 아티클 큐레이션 포털',
+        publisher: {
+          '@type': 'Organization',
+          name: '모아 퀘스트 (MOA.QUEST)',
+          url: 'https://www.moa.quest',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://www.moa.quest/logo.jpg',
+          },
+        },
+      },
+      {
+        '@type': 'CollectionPage',
+        '@id': 'https://www.moa.quest/#webpage',
+        url: 'https://www.moa.quest',
+        name: '모아 퀘스트 (MOA.QUEST) | 엄선된 블로그 & 라이프 큐레이션',
+        description: '업무 생산성 도구, 자동차 전문 정보, 마음 힐링 에세이의 핵심 요약과 공식 원문을 제공합니다.',
+        isPartOf: {
+          '@id': 'https://www.moa.quest/#website',
+        },
+      },
+      {
+        '@type': 'ItemList',
+        '@id': 'https://www.moa.quest/#itemlist',
+        itemListElement: posts.slice(0, 60).map((post, idx) => ({
+          '@type': 'ListItem',
+          position: idx + 1,
+          item: {
+            '@type': 'BlogPosting',
+            '@id': post.original_url,
+            headline: post.title,
+            description: post.summary,
+            image: post.thumbnail_url && !post.thumbnail_url.includes('unsplash.com')
+              ? post.thumbnail_url
+              : 'https://www.moa.quest/logo.jpg',
+            datePublished: post.published_at,
+            dateModified: post.published_at,
+            author: {
+              '@type': 'Organization',
+              name: post.blog_name,
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: '모아 퀘스트 (MOA.QUEST)',
+              url: 'https://www.moa.quest',
+              logo: {
+                '@type': 'ImageObject',
+                url: 'https://www.moa.quest/logo.jpg',
+              },
+            },
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': post.original_url,
+            },
+          },
+        })),
+      },
+    ],
+  };
+
   return (
     <div className="space-y-8">
+      {/* ── Schema.org JSON-LD 구조화 데이터 마크업 주입 ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* ── Hero Section (보색 대비 Ambient Glow & Premium Glass Card) ── */}
       <section className="relative overflow-hidden rounded-3xl noise border border-white/[0.1] p-7 sm:p-11 shadow-2xl"
         style={{

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { BlogPost } from '@/lib/types';
 import {
@@ -11,8 +11,10 @@ import {
   X,
   SlidersHorizontal,
   Sparkles,
-  Layers,
-  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   Share2,
   Check,
 } from 'lucide-react';
@@ -114,7 +116,6 @@ function getBlogTheme(blogName: string) {
       badge: 'text-rose-300 bg-rose-950/90 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)]',
       dot: 'bg-rose-400',
       hover: 'group-hover:text-rose-300',
-      activeBg: 'from-rose-500 via-pink-600 to-purple-600',
       btnHover: 'hover:bg-rose-500/20 hover:border-rose-500/50 hover:text-rose-200',
       placeholderGradient: 'from-rose-950/60 via-slate-900 to-purple-950/40',
       iconColor: 'text-rose-400/70',
@@ -136,7 +137,7 @@ function getBlogTheme(blogName: string) {
 }
 
 /**
- * 포스트 카드 컴포넌트 (카드 클릭 시 상세 모달 오픈, 원문 링크 별도 지원)
+ * 포스트 카드 컴포넌트
  */
 function PostCardItem({
   post,
@@ -159,7 +160,7 @@ function PostCardItem({
 
   return (
     <article className="post-card group flex flex-col rounded-2xl overflow-hidden shadow-lg cursor-pointer">
-      {/* 썸네일 영역 (클릭 시 상세 모달) */}
+      {/* 썸네일 영역 */}
       <div
         onClick={() => onOpenDetail(post)}
         className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950 cursor-pointer"
@@ -291,7 +292,7 @@ function PostDetailModal({
         className="w-full max-w-lg bg-slate-900/95 border border-white/[0.12] rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5 backdrop-blur-2xl animate-scaleIn max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 상단 헤더: 블로그 뱃지 & 닫기 버튼 */}
+        {/* 상단 헤더 */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span
@@ -318,7 +319,7 @@ function PostDetailModal({
           {post.title}
         </h2>
 
-        {/* 150자 핵심 요약 박스 (시각적 하이라이트) */}
+        {/* 150자 핵심 요약 박스 */}
         <div className="p-4.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
@@ -334,7 +335,7 @@ function PostDetailModal({
           💡 모아 퀘스트는 공식 원문 포스팅으로 안전하게 연결해 드립니다. 전문 열람 및 상세 정보는 아래 공식 원문 페이지에서 확인하실 수 있습니다.
         </div>
 
-        {/* 하단 버튼 바: dofollow 공식 원문 이동 & 링크 복사 */}
+        {/* 하단 버튼 바 */}
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
           <button
             type="button"
@@ -354,7 +355,6 @@ function PostDetailModal({
             )}
           </button>
 
-          {/* 메인 dofollow 백링크 버튼 */}
           <a
             href={post.original_url}
             target="_blank"
@@ -371,12 +371,16 @@ function PostDetailModal({
   );
 }
 
+const ITEMS_PER_PAGE = 16; // 4열 × 4행 = 16개
+
 export default function PostListWithFilter({ initialPosts }: Props) {
   const [selectedTopic, setSelectedTopic] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [visibleCount, setVisibleCount] = useState<number>(16);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [mounted, setMounted] = useState(false);
+
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -409,18 +413,59 @@ export default function PostListWithFilter({ initialPosts }: Props) {
     });
   }, [initialPosts, selectedTopic, searchQuery]);
 
-  const visiblePosts = useMemo(
-    () => filteredPosts.slice(0, visibleCount),
-    [filteredPosts, visibleCount]
-  );
+  // 총 페이지 수 계산
+  const totalPages = useMemo(() => {
+    return Math.max(1, Math.ceil(filteredPosts.length / ITEMS_PER_PAGE));
+  }, [filteredPosts]);
+
+  // 현재 페이지의 포스트 슬라이스
+  const currentPosts = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredPosts.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredPosts, currentPage]);
+
+  // 페이지 이동 처리 및 상단 스크롤
+  const goToPage = (page: number) => {
+    const targetPage = Math.max(1, Math.min(page, totalPages));
+    setCurrentPage(targetPage);
+    if (sectionRef.current) {
+      const topOffset = sectionRef.current.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: topOffset, behavior: 'smooth' });
+    }
+  };
 
   const handleSelectTopic = (topicId: string) => {
     setSelectedTopic(topicId);
-    setVisibleCount(16);
+    setCurrentPage(1);
   };
 
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    setCurrentPage(1);
+  };
+
+  // 번호형 페이지네이션 번호 목록 생성
+  const paginationRange = useMemo(() => {
+    const delta = 2; // 현재 페이지 좌우로 노출할 번호 개수
+    const range: (number | string)[] = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        range.push(i);
+      } else if (range[range.length - 1] !== '...') {
+        range.push('...');
+      }
+    }
+
+    return range;
+  }, [totalPages, currentPage]);
+
   return (
-    <section className="space-y-6">
+    <section ref={sectionRef} className="space-y-6">
       {/* ── 주제별(Topic) 탭 & 검색 바 (Control Bar) ── */}
       <div className="glass rounded-2xl p-3.5 sm:p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-xl">
         {/* 주제별 탭 목록 */}
@@ -457,16 +502,13 @@ export default function PostListWithFilter({ initialPosts }: Props) {
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setVisibleCount(16);
-            }}
+            onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="제목 및 본문 실시간 검색..."
             className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm bg-slate-950/80 border border-white/[0.12] rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400/80 focus:ring-2 focus:ring-amber-400/20 transition-all backdrop-blur-md"
           />
           {searchQuery && (
             <button
-              onClick={() => setSearchQuery('')}
+              onClick={() => handleSearchChange('')}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />
@@ -491,19 +533,19 @@ export default function PostListWithFilter({ initialPosts }: Props) {
             </span>
           )}
         </div>
-        <span className="hidden sm:inline text-[11px] text-slate-500">
-          * 카드를 클릭하면 150자 핵심 요약 모달이 열립니다.
+        <span className="hidden sm:inline text-[11px] text-slate-400">
+          페이지: <strong className="text-amber-400">{currentPage}</strong> / {totalPages} (총 {filteredPosts.length}개)
         </span>
       </div>
 
-      {/* ── 4열 포스트 그리드 ── */}
+      {/* ── 4열 포스트 그리드 (16개 고정) ── */}
       {filteredPosts.length === 0 ? (
         <div className="text-center py-28 glass rounded-3xl">
           <p className="text-slate-400 text-sm">조건에 맞는 포스팅이 없습니다.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
-          {visiblePosts.map((post) => (
+          {currentPosts.map((post) => (
             <PostCardItem
               key={post.id || post.original_url}
               post={post}
@@ -513,22 +555,91 @@ export default function PostListWithFilter({ initialPosts }: Props) {
         </div>
       )}
 
-      {/* ── 더보기 버튼 ── */}
-      {visiblePosts.length < filteredPosts.length && (
-        <div className="flex justify-center pt-6">
+      {/* ── 번호형 페이지네이션 컨트롤러 (1, 2, 3... 번호 네비게이션) ── */}
+      {totalPages > 1 && (
+        <nav
+          aria-label="포스트 페이지 목록"
+          className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 pt-8 pb-4"
+        >
+          {/* 맨 처음 페이지 버튼 */}
           <button
-            onClick={() => setVisibleCount((p) => p + 16)}
-            className="group px-8 py-3.5 text-xs sm:text-sm font-bold text-slate-200 hover:text-white glass rounded-2xl border border-white/[0.1] hover:border-amber-400/50 hover:bg-amber-500/10 transition-all shadow-xl cursor-pointer hover:shadow-amber-500/15 active:scale-98"
+            onClick={() => goToPage(1)}
+            disabled={currentPage === 1}
+            className="p-2 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold glass border border-white/[0.08] text-slate-400 hover:text-white hover:border-amber-400/40 disabled:opacity-30 disabled:hover:border-white/[0.08] disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-1"
+            title="맨 처음 페이지로"
           >
-            <span>더 많은 아티클 탐색하기</span>
-            <span className="ml-2 text-amber-400 font-semibold">
-              ({visiblePosts.length} / {filteredPosts.length.toLocaleString()})
-            </span>
+            <ChevronsLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">처음</span>
           </button>
-        </div>
+
+          {/* 이전 페이지 버튼 */}
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="p-2 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold glass border border-white/[0.08] text-slate-400 hover:text-white hover:border-amber-400/40 disabled:opacity-30 disabled:hover:border-white/[0.08] disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-1"
+            title="이전 페이지로"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">이전</span>
+          </button>
+
+          {/* 숫자 페이지네이션 번호 버튼들 */}
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            {paginationRange.map((pageNumber, idx) => {
+              if (pageNumber === '...') {
+                return (
+                  <span
+                    key={`ellipsis-${idx}`}
+                    className="px-2 py-1 text-slate-600 text-xs font-mono"
+                  >
+                    …
+                  </span>
+                );
+              }
+
+              const isCurrent = pageNumber === currentPage;
+              return (
+                <button
+                  key={`page-${pageNumber}`}
+                  onClick={() => goToPage(Number(pageNumber))}
+                  className={`min-w-[36px] h-9 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+                    isCurrent
+                      ? 'bg-gradient-to-r from-amber-500 via-purple-600 to-indigo-600 text-white shadow-lg shadow-amber-500/25 ring-1 ring-white/30 scale-105'
+                      : 'glass border border-white/[0.08] text-slate-300 hover:text-white hover:border-amber-400/40 hover:bg-white/[0.06]'
+                  }`}
+                  aria-current={isCurrent ? 'page' : undefined}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 다음 페이지 버튼 */}
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="p-2 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold glass border border-white/[0.08] text-slate-400 hover:text-white hover:border-amber-400/40 disabled:opacity-30 disabled:hover:border-white/[0.08] disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-1"
+            title="다음 페이지로"
+          >
+            <span className="hidden sm:inline">다음</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          {/* 맨 끝 페이지 버튼 */}
+          <button
+            onClick={() => goToPage(totalPages)}
+            disabled={currentPage === totalPages}
+            className="p-2 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold glass border border-white/[0.08] text-slate-400 hover:text-white hover:border-amber-400/40 disabled:opacity-30 disabled:hover:border-white/[0.08] disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-1"
+            title="맨 끝 페이지로"
+          >
+            <span className="hidden sm:inline">끝</span>
+            <ChevronsRight className="w-4 h-4" />
+          </button>
+        </nav>
       )}
 
-      {/* ── 상세 요약 팝업 모달 (체류 시간 극대화) ── */}
+      {/* ── 상세 요약 팝업 모달 ── */}
       {mounted && selectedPost && (
         <PostDetailModal
           post={selectedPost}

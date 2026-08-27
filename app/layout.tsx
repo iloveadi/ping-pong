@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Image from 'next/image';
 import SyncButton from '@/components/SyncButton';
 
 export const metadata: Metadata = {
@@ -49,15 +48,43 @@ export default function RootLayout({
             {/* 로고 & 타이틀 */}
             <div className="flex items-center gap-3.5 group cursor-pointer">
               <div className="relative">
-                <div className="w-11 h-11 rounded-2xl overflow-hidden shadow-lg shadow-indigo-500/30 group-hover:scale-105 group-hover:shadow-indigo-500/50 transition-all duration-300" style={{filter: 'drop-shadow(0 0 12px rgba(139,92,246,0.5))'}}>
-                  <Image
-                    src="/logo.jpg"
-                    alt="핑퐁허브 로고"
-                    width={44}
-                    height={44}
-                    className="w-full h-full object-cover"
-                    priority
-                  />
+                <div className="w-11 h-11 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-all duration-300"
+                  style={{
+                    background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%)',
+                    boxShadow: '0 0 0 1px rgba(139,92,246,0.3), 0 4px 20px rgba(139,92,246,0.25)',
+                  }}>
+                  {/* 핑퐁 SVG 로고 */}
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* 패들 */}
+                    <ellipse cx="11" cy="16" rx="9" ry="9" transform="rotate(-35 11 16)" fill="#dc2626" />
+                    <ellipse cx="11" cy="16" rx="9" ry="9" transform="rotate(-35 11 16)" fill="url(#paddleGrad)" />
+                    {/* 패들 손잡이 */}
+                    <rect x="17.5" y="19" width="3" height="7.5" rx="1.5" transform="rotate(-35 17.5 19)" fill="#7c3aed" />
+                    {/* 패들 하이라이트 */}
+                    <ellipse cx="8.5" cy="13" rx="3.5" ry="2.5" transform="rotate(-35 8.5 13)" fill="rgba(255,255,255,0.18)" />
+                    {/* 공 */}
+                    <circle cx="20" cy="9" r="6" fill="white" />
+                    <circle cx="20" cy="9" r="6" fill="url(#ballGrad)" />
+                    {/* 공 솔기 */}
+                    <path d="M15 7.5 Q20 11 25 7.5" stroke="rgba(139,92,246,0.5)" strokeWidth="1" fill="none" strokeLinecap="round"/>
+                    <path d="M15 10.5 Q20 7 25 10.5" stroke="rgba(139,92,246,0.5)" strokeWidth="1" fill="none" strokeLinecap="round"/>
+                    {/* 공 글로우 */}
+                    <circle cx="20" cy="9" r="6" fill="url(#glowGrad)" />
+                    <defs>
+                      <radialGradient id="ballGrad" cx="35%" cy="30%" r="70%">
+                        <stop offset="0%" stopColor="#ffffff" />
+                        <stop offset="100%" stopColor="#e0e7ff" />
+                      </radialGradient>
+                      <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="60%" stopColor="transparent" />
+                        <stop offset="100%" stopColor="rgba(139,92,246,0.35)" />
+                      </radialGradient>
+                      <linearGradient id="paddleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#ef4444" />
+                        <stop offset="100%" stopColor="#be123c" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#090d16] flex items-center justify-center">
                   <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>

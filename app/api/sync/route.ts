@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     console.error('[Admin Sync] 동기화 중 에러:', error);
     return NextResponse.json(
       { success: false, message: error?.message || '동기화 중 오류가 발생했습니다.' },
-      { status: 500 }
+      { status: 400 }
     );
   }
 }

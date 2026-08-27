@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Image from 'next/image';
 import SyncButton from '@/components/SyncButton';
-import { Sparkles } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '핑퐁허브 (PingPong Hub) | 엄선된 블로그 & 라이프 큐레이션',
@@ -49,8 +49,15 @@ export default function RootLayout({
             {/* 로고 & 타이틀 */}
             <div className="flex items-center gap-3.5 group cursor-pointer">
               <div className="relative">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 text-white font-black text-xl tracking-wider group-hover:scale-105 transition-transform duration-300">
-                  P
+                <div className="w-11 h-11 rounded-2xl overflow-hidden shadow-lg shadow-indigo-500/30 group-hover:scale-105 group-hover:shadow-indigo-500/50 transition-all duration-300" style={{filter: 'drop-shadow(0 0 12px rgba(139,92,246,0.5))'}}>
+                  <Image
+                    src="/logo.jpg"
+                    alt="핑퐁허브 로고"
+                    width={44}
+                    height={44}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#090d16] flex items-center justify-center">
                   <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>

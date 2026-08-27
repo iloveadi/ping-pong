@@ -1,14 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Sparkles, RefreshCw, CheckCircle, AlertCircle, Lock, X } from 'lucide-react';
 
 export default function SyncButton() {
+  const [mounted, setMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleOpenModal = () => {
     setPassword('');
@@ -74,21 +80,22 @@ export default function SyncButton() {
       <div className="inline-flex items-center gap-2">
         {/* PingPong Hub 알약형 뱃지 스타일의 피드 동기화 버튼 */}
         <button
+          type="button"
           onClick={handleOpenModal}
           disabled={loading}
-          className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-indigo-500/15 to-purple-500/15 hover:from-indigo-500/25 hover:to-purple-500/25 text-indigo-300 hover:text-indigo-200 border border-indigo-500/30 hover:border-indigo-500/50 font-medium transition-all cursor-pointer shadow-sm active:scale-95 disabled:opacity-50"
+          className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-indigo-500/15 to-purple-500/15 hover:from-indigo-500/30 hover:to-purple-500/30 text-indigo-300 hover:text-indigo-100 border border-indigo-500/30 hover:border-indigo-500/60 font-medium transition-all cursor-pointer shadow-sm active:scale-95 disabled:opacity-50"
           title="관리자 피드 동기화 (클릭)"
         >
           {loading ? (
             <RefreshCw className="w-3 h-3 text-indigo-400 animate-spin" />
           ) : (
-            <Sparkles className="w-3 h-3 text-indigo-400 transition-transform group-hover:rotate-12" />
+            <Sparkles className="w-3 h-3 text-indigo-400" />
           )}
           <span>PingPong Hub</span>
         </button>
 
         {statusMessage && (
-          <span className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800/90 text-slate-200 border border-slate-700 animate-fadeIn shadow-lg">
+          <span className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800/95 text-slate-200 border border-slate-700 animate-fadeIn shadow-xl backdrop-blur-md">
             {statusMessage.includes('완료') ? (
               <CheckCircle className="w-3 h-3 text-emerald-400" />
             ) : (
@@ -99,25 +106,26 @@ export default function SyncButton() {
         )}
       </div>
 
-      {/* 관리자 비밀번호 입력 모달 */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="w-full max-w-xs bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl space-y-4">
+      {/* 관리자 비밀번호 입력 모달 (Portal을 사용하여 화면 정중앙에 렌더링) */}
+      {mounted && isModalOpen && createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fadeIn">
+          <div className="w-full max-w-xs bg-slate-900/95 border border-white/10 rounded-2xl p-5 shadow-2xl space-y-4 backdrop-blur-xl animate-scaleIn">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm font-bold text-white">
                 <Lock className="w-4 h-4 text-indigo-400" />
                 <span>관리자 인증</span>
               </div>
               <button
+                type="button"
                 onClick={handleCloseModal}
                 disabled={loading}
-                className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-white transition-colors cursor-pointer p-1 rounded-lg hover:bg-white/5"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-400 leading-relaxed">
               피드 동기화를 실행하려면 관리자 비밀번호를 입력하세요.
             </p>
 
@@ -133,10 +141,10 @@ export default function SyncButton() {
                   placeholder="비밀번호 입력"
                   autoFocus
                   disabled={loading}
-                  className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all text-center tracking-widest font-mono text-base disabled:opacity-50"
+                  className="w-full px-3 py-2.5 text-xs bg-slate-950/80 border border-slate-700 focus:border-indigo-500 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all text-center tracking-widest font-mono text-base disabled:opacity-50"
                 />
                 {passwordError && (
-                  <span className="block mt-1.5 text-[11px] text-rose-400 text-center">
+                  <span className="block mt-1.5 text-[11px] text-rose-400 text-center font-medium">
                     {passwordError}
                   </span>
                 )}
@@ -168,9 +176,11 @@ export default function SyncButton() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
 }
+
 

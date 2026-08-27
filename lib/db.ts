@@ -97,47 +97,60 @@ export async function savePosts(incomingPosts: ParsedPost[]): Promise<SyncStats>
 
   // 1. Supabase가 설정되어 있는 경우
   if (isSupabaseConfigured && supabase) {
-    // 100개 단위로 나누어 기존 URL 중복 체크 및 일괄 INSERT
-    const CHUNK_SIZE = 80;
-    let totalSaved = 0;
+    // 1-1. DB에 존재하는 기존 original_url 전체를 안전하게 페이지네이션하여 조회 (PostgREST .in 특수문자/괄호 오류 방지)
+    const existingUrlSet = new Set<string>();
+    let currentOffset = 0;
+    const PAGE_SIZE = 1000;
 
-    for (let i = 0; i < uniqueIncomingPosts.length; i += CHUNK_SIZE) {
-      const chunk = uniqueIncomingPosts.slice(i, i + CHUNK_SIZE);
-      const incomingUrls = chunk.map((p) => p.original_url);
-
+    while (true) {
       const { data: existingRows, error: checkError } = await supabase
         .from('posts')
         .select('original_url')
-        .in('original_url', incomingUrls);
+        .range(currentOffset, currentOffset + PAGE_SIZE - 1);
 
       if (checkError) {
-        console.error('[Supabase] 기존 URL 중복 체크 에러:', checkError);
+        console.error('[Supabase] 기존 URL 목록 조회 에러:', checkError);
         throw new Error(`[Supabase 중복조회 오류] ${checkError.message} (${checkError.code || ''})`);
       }
 
-      const existingUrlSet = new Set((existingRows || []).map((row: { original_url: string }) => row.original_url));
+      if (!existingRows || existingRows.length === 0) break;
+      for (const row of existingRows) {
+        if (row.original_url) {
+          existingUrlSet.add(row.original_url);
+        }
+      }
+      if (existingRows.length < PAGE_SIZE) break;
+      currentOffset += existingRows.length;
+    }
 
-      const postsToInsert = chunk
-        .filter((p) => !existingUrlSet.has(p.original_url))
-        .map((p) => ({
-          title: p.title,
-          thumbnail_url: p.thumbnail_url,
-          summary: p.summary,
-          original_url: p.original_url,
-          published_at: p.published_at,
-          blog_name: p.blog_name,
-          category: p.category || '일반',
-          created_at: new Date().toISOString(),
-        }));
+    // 1-2. 중복되지 않은 신규 포스트만 필터링
+    const postsToInsert = uniqueIncomingPosts
+      .filter((p) => !existingUrlSet.has(p.original_url))
+      .map((p) => ({
+        title: p.title,
+        thumbnail_url: p.thumbnail_url || null,
+        summary: (p.summary || '요약 내용이 없습니다.').slice(0, 195),
+        original_url: p.original_url,
+        published_at: p.published_at,
+        blog_name: p.blog_name,
+        category: p.category || '일반',
+        created_at: new Date().toISOString(),
+      }));
 
-      if (postsToInsert.length > 0) {
-        const { error: insertError } = await supabase.from('posts').insert(postsToInsert);
+    let totalSaved = 0;
+    if (postsToInsert.length > 0) {
+      const CHUNK_SIZE = 50;
+      for (let i = 0; i < postsToInsert.length; i += CHUNK_SIZE) {
+        const chunk = postsToInsert.slice(i, i + CHUNK_SIZE);
+        const { error: insertError } = await supabase
+          .from('posts')
+          .upsert(chunk, { onConflict: 'original_url', ignoreDuplicates: true });
 
         if (insertError) {
           console.error('[Supabase] 신규 포스트 저장 에러:', insertError);
           throw new Error(`[Supabase 저장 오류] ${insertError.message} (${insertError.code || ''})`);
         }
-        totalSaved += postsToInsert.length;
+        totalSaved += chunk.length;
       }
     }
 

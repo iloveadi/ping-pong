@@ -1,31 +1,20 @@
 import fs from 'fs';
 import path from 'path';
+import initialLocalPosts from '@/data/posts.json';
 import { supabase, isSupabaseConfigured } from './supabase';
 import { BlogPost, ParsedPost, SyncStats } from './types';
 
-// 로컬 파일 기반 Fallback 스토리지 경로 (Supabase 미설정 시 자동 사용)
 const DATA_DIR = path.join(process.cwd(), 'data');
 const LOCAL_POSTS_FILE = path.join(DATA_DIR, 'posts.json');
 
 /**
- * 로컬 JSON 저장소 초기화 및 읽기 헬퍼
+ * 번들에 포함된 로컬 포스트 데이터 조회
  */
 function getLocalPosts(): BlogPost[] {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(LOCAL_POSTS_FILE)) {
-      fs.writeFileSync(LOCAL_POSTS_FILE, JSON.stringify([], null, 2), 'utf-8');
-      return [];
-    }
-    const fileData = fs.readFileSync(LOCAL_POSTS_FILE, 'utf-8');
-    return JSON.parse(fileData) as BlogPost[];
-  } catch (error) {
-    console.error('[DB] 로컬 포스트 파일 읽기 오류:', error);
-    return [];
-  }
+  return initialLocalPosts as unknown as BlogPost[];
 }
+
+
 
 /**
  * 로컬 JSON 파일에 포스트 저장

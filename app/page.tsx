@@ -11,7 +11,7 @@ export default async function HomePage() {
   let posts = await getPosts(2000);
 
   // Supabase에 과거 전체 데이터(1028건)가 아직 적재되지 않은 경우 자동 일괄 마이그레이션 1회 실행
-  if (posts.length < 100) {
+  if (posts.length < 500) {
     try {
       console.log(`[Init] DB 포스트 수가 ${posts.length}건이므로 과거 전체 아티클 마이그레이션을 실행합니다.`);
       await seedLocalPostsToSupabase();
@@ -20,6 +20,7 @@ export default async function HomePage() {
       console.error('초기 과거 포스트 마이그레이션 오류:', e);
     }
   }
+
 
 
   return (

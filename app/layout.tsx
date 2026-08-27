@@ -41,93 +41,74 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="dark scroll-smooth">
-      <body className="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
-        {/* 상단 네비게이션 헤더 */}
-        <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090d16]/75 border-b border-white/[0.08] shadow-sm transition-all">
-          <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            {/* 로고 & 타이틀 */}
-            <div className="flex items-center gap-3.5 group cursor-pointer">
+      <body className="min-h-screen flex flex-col antialiased selection:bg-indigo-500/40 selection:text-indigo-100">
+        {/* ── 헤더 ── */}
+        <header className="sticky top-0 z-50 border-b border-white/[0.05]"
+          style={{ background: 'rgba(7, 9, 15, 0.85)', backdropFilter: 'blur(24px) saturate(180%)', WebkitBackdropFilter: 'blur(24px) saturate(180%)' }}>
+          <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+            {/* 로고 */}
+            <div className="flex items-center gap-3 group cursor-pointer">
               <div className="relative">
-                <div className="w-11 h-11 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-all duration-300"
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center group-hover:scale-105 transition-all duration-300"
                   style={{
-                    background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%)',
-                    boxShadow: '0 0 0 1px rgba(139,92,246,0.3), 0 4px 20px rgba(139,92,246,0.25)',
+                    background: 'linear-gradient(135deg, #1e1b4b 0%, #3730a3 50%, #1e1b4b 100%)',
+                    boxShadow: '0 0 0 1px rgba(139,92,246,0.25), 0 4px 16px rgba(99,102,241,0.2)',
                   }}>
-                  {/* 핑퐁 SVG 로고 */}
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* 패들 */}
-                    <ellipse cx="11" cy="16" rx="9" ry="9" transform="rotate(-35 11 16)" fill="#dc2626" />
-                    <ellipse cx="11" cy="16" rx="9" ry="9" transform="rotate(-35 11 16)" fill="url(#paddleGrad)" />
-                    {/* 패들 손잡이 */}
+                  <svg width="22" height="22" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="11" cy="16" rx="9" ry="9" transform="rotate(-35 11 16)" fill="url(#paddleGrad2)" />
                     <rect x="17.5" y="19" width="3" height="7.5" rx="1.5" transform="rotate(-35 17.5 19)" fill="#7c3aed" />
-                    {/* 패들 하이라이트 */}
                     <ellipse cx="8.5" cy="13" rx="3.5" ry="2.5" transform="rotate(-35 8.5 13)" fill="rgba(255,255,255,0.18)" />
-                    {/* 공 */}
-                    <circle cx="20" cy="9" r="6" fill="white" />
-                    <circle cx="20" cy="9" r="6" fill="url(#ballGrad)" />
-                    {/* 공 솔기 */}
-                    <path d="M15 7.5 Q20 11 25 7.5" stroke="rgba(139,92,246,0.5)" strokeWidth="1" fill="none" strokeLinecap="round"/>
-                    <path d="M15 10.5 Q20 7 25 10.5" stroke="rgba(139,92,246,0.5)" strokeWidth="1" fill="none" strokeLinecap="round"/>
-                    {/* 공 글로우 */}
-                    <circle cx="20" cy="9" r="6" fill="url(#glowGrad)" />
+                    <circle cx="20" cy="9" r="6" fill="url(#ballGrad2)" />
+                    <path d="M15 7.5 Q20 11 25 7.5" stroke="rgba(139,92,246,0.45)" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
+                    <path d="M15 10.5 Q20 7 25 10.5" stroke="rgba(139,92,246,0.45)" strokeWidth="0.9" fill="none" strokeLinecap="round"/>
                     <defs>
-                      <radialGradient id="ballGrad" cx="35%" cy="30%" r="70%">
+                      <radialGradient id="ballGrad2" cx="35%" cy="30%" r="70%">
                         <stop offset="0%" stopColor="#ffffff" />
-                        <stop offset="100%" stopColor="#e0e7ff" />
+                        <stop offset="100%" stopColor="#ddd6fe" />
                       </radialGradient>
-                      <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
-                        <stop offset="60%" stopColor="transparent" />
-                        <stop offset="100%" stopColor="rgba(139,92,246,0.35)" />
-                      </radialGradient>
-                      <linearGradient id="paddleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <linearGradient id="paddleGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#ef4444" />
                         <stop offset="100%" stopColor="#be123c" />
                       </linearGradient>
                     </defs>
                   </svg>
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#090d16] flex items-center justify-center">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#07090f] flex items-center justify-center">
+                  <span className="w-1 h-1 rounded-full bg-white animate-ping" />
                 </div>
               </div>
 
-              <div className="flex items-center gap-2.5">
-                <span className="font-extrabold text-lg text-white tracking-tight group-hover:text-indigo-300 transition-colors">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-[15px] text-white tracking-tight group-hover:text-indigo-300 transition-colors">
                   핑퐁허브
                 </span>
                 <SyncButton />
               </div>
             </div>
 
-            {/* 상태 뱃지 */}
-            <div className="text-xs text-slate-400 hidden sm:flex items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 text-slate-300">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"></span>
-                <span className="text-[11px] font-medium">24/7 실시간 큐레이션 가동 중</span>
-              </div>
+            {/* 우측 상태 */}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.06] bg-white/[0.02]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)] animate-pulse" />
+              <span className="text-[11px] text-slate-500 font-medium">24/7 큐레이션 가동 중</span>
             </div>
           </div>
         </header>
 
-        {/* 메인 콘텐츠 영역 */}
-        <main className="flex-1 max-w-[1700px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* ── 메인 ── */}
+        <main className="flex-1 max-w-[1700px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-7">
           {children}
         </main>
 
-        {/* 하단 푸터 */}
-        <footer className="border-t border-white/[0.06] bg-[#070a11]/80 backdrop-blur-md py-8 text-center text-xs text-slate-500">
-          <div className="max-w-[1700px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-left space-y-1">
-              <p className="text-slate-400 text-xs font-medium">
-                핑퐁허브는 엄선된 전문 블로그 포스팅의 핵심 요약과 공식 원문 링크를 큐레이션합니다.
-              </p>
-              <p className="text-[11px] text-slate-600">
-                © {new Date().getFullYear()} PingPong Hub. All rights reserved. • Powered by Next.js &amp; Supabase
-              </p>
-            </div>
-            <div className="shrink-0 flex items-center gap-3">
-              <SyncButton />
-            </div>
+        {/* ── 푸터 ── */}
+        <footer className="border-t border-white/[0.04] py-6 mt-4"
+          style={{ background: 'rgba(5, 7, 12, 0.8)' }}>
+          <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-[11px] text-slate-700">
+              핑퐁허브는 엄선된 전문 블로그 포스팅의 핵심 요약과 공식 원문 링크를 큐레이션합니다.
+            </p>
+            <p className="text-[10px] text-slate-800">
+              © {new Date().getFullYear()} PingPong Hub · Powered by Next.js &amp; Supabase
+            </p>
           </div>
         </footer>
       </body>

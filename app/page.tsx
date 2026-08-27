@@ -24,61 +24,52 @@ export default async function HomePage() {
 
 
   return (
-    <div className="space-y-10">
-      {/* Hero Section with Ambient Glow */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-indigo-950/40 via-slate-900/40 to-slate-950/60 border border-white/[0.08] p-6 sm:p-10 shadow-2xl backdrop-blur-xl">
-        {/* Background Decorative Radial Lights */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="space-y-8">
+      {/* ── Hero ── */}
+      <section className="relative overflow-hidden rounded-3xl noise border border-white/[0.07] p-7 sm:p-10 shadow-2xl"
+        style={{ background: 'linear-gradient(145deg, rgba(15,18,35,0.95) 0%, rgba(20,16,50,0.9) 50%, rgba(12,14,28,0.95) 100%)' }}>
+
+        {/* Ambient lights */}
+        <div className="absolute -top-32 -left-32 w-80 h-80 bg-indigo-600/12 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 -right-32 w-72 h-72 bg-purple-600/12 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-32 bg-violet-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-          <div className="max-w-3xl space-y-3.5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 shadow-sm backdrop-blur-md">
-              <Rss className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
+          <div className="space-y-4 max-w-2xl">
+            {/* 레이블 */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <Rss className="w-3 h-3 animate-pulse" />
               <span>지식 &amp; 라이프 큐레이션 포털</span>
             </div>
-            
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-              핑퐁허브와 함께하는 <br className="hidden sm:inline" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 drop-shadow-[0_0_25px_rgba(168,85,247,0.3)]">
-                프리미엄 인사이트 큐레이션
-              </span>
+
+            {/* 타이틀 */}
+            <h1 className="text-2xl sm:text-[2.2rem] font-extrabold tracking-tight text-white leading-[1.2]">
+              더 좋은 하루를 만드는<br className="hidden sm:inline" />
+              <span className="gradient-text"> 프리미엄 인사이트</span>
             </h1>
 
-            <p className="text-xs sm:text-sm text-slate-300/90 leading-relaxed max-w-2xl font-normal">
-              업무 생산성 툴부터 자동차 라이프, 마음 치유 에세이까지 다양한 인사이트를 한눈에 모아보세요.
-              핵심 요약과 함께 공식 원문 포스팅으로 바로 이동할 수 있습니다.
+            <p className="text-sm text-slate-400 leading-relaxed max-w-xl">
+              생산성 툴부터 자동차 라이프, 마음 치유 에세이까지 — 핵심만 요약해 드립니다.
             </p>
           </div>
 
-          {/* 우측 지표 통계 배너 (Glass Card) */}
-          <div className="flex items-center gap-4 bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] p-5 rounded-2xl shadow-xl backdrop-blur-md shrink-0 transition-all">
-            <div className="flex items-center gap-6 text-xs">
-              <div className="space-y-1">
-                <span className="text-[11px] text-slate-400 flex items-center gap-1.5 font-medium">
-                  <span className="w-2 h-2 rounded-full bg-indigo-400"></span> 큐레이션 채널
-                </span>
-                <strong className="text-xl sm:text-2xl text-white font-extrabold tracking-tight block">
-                  {DEFAULT_FEEDS.length}<span className="text-xs font-normal text-indigo-400 ml-0.5">개</span>
-                </strong>
-              </div>
-
-              <div className="w-[1px] h-10 bg-white/[0.1]"></div>
-
-              <div className="space-y-1">
-                <span className="text-[11px] text-slate-400 flex items-center gap-1.5 font-medium">
-                  <span className="w-2 h-2 rounded-full bg-purple-400"></span> 등록 아티클
-                </span>
-                <strong className="text-xl sm:text-2xl text-white font-extrabold tracking-tight block">
-                  {posts.length.toLocaleString()}<span className="text-xs font-normal text-purple-400 ml-0.5">건</span>
-                </strong>
-              </div>
+          {/* 통계 카드 */}
+          <div className="flex gap-3 shrink-0">
+            <div className="flex flex-col gap-1 px-5 py-4 rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] transition-colors text-center min-w-[90px]">
+              <span className="text-[10px] text-slate-600 font-medium uppercase tracking-widest">채널</span>
+              <strong className="text-2xl font-extrabold text-white tracking-tight">{DEFAULT_FEEDS.length}</strong>
+              <span className="text-[10px] text-indigo-500 font-medium">blogs</span>
+            </div>
+            <div className="flex flex-col gap-1 px-5 py-4 rounded-2xl border border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04] transition-colors text-center min-w-[90px]">
+              <span className="text-[10px] text-slate-600 font-medium uppercase tracking-widest">아티클</span>
+              <strong className="text-2xl font-extrabold text-white tracking-tight">{posts.length.toLocaleString()}</strong>
+              <span className="text-[10px] text-purple-500 font-medium">articles</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Posts Section with Blog Filter & Search */}
+      {/* ── Posts ── */}
       <PostListWithFilter initialPosts={posts} />
     </div>
   );

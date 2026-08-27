@@ -2,8 +2,15 @@ import Parser from 'rss-parser';
 import * as cheerio from 'cheerio';
 import { FeedSource, ParsedPost } from './types';
 
-// 타겟 블로그 RSS 피드 목록 (네이버 블로그 및 워드프레스 공식 피드)
+// 타겟 블로그 RSS 피드 목록 (네이버 블로그, 티스토리 및 워드프레스 공식 피드)
 export const DEFAULT_FEEDS: FeedSource[] = [
+  {
+    id: 'tistory-readpics',
+    name: '인사이트 북스',
+    url: 'https://read.pics/rss',
+    category: 'Books & Insight',
+    isActive: true,
+  },
   {
     id: 'naver-desktools',
     name: 'Desktools.run 블로그',
@@ -103,12 +110,35 @@ export function extractThumbnail(item: any): string {
     }
   }
 
-  // 3. content:encoded, content, description 내부의 첫 번째 <img> 태그 파싱
+  // 3. content:encoded, content, description 내부의 <img> 태그 파싱
   const contentSnippet = item['content:encoded'] || item.content || item.description || '';
   if (contentSnippet) {
     try {
       const $ = cheerio.load(contentSnippet);
-      const firstImgSrc = $('img').first().attr('src');
+      const candidates: string[] = [];
+      $('img').each((_, el) => {
+        const src = $(el).attr('src') || $(el).attr('data-url') || $(el).attr('data-phocus');
+        if (!src || (!src.startsWith('http://') && !src.startsWith('https://'))) return;
+
+        const w = parseInt($(el).attr('data-origin-width') || $(el).attr('width') || '0', 10);
+        const h = parseInt($(el).attr('data-origin-height') || $(el).attr('height') || '0', 10);
+        const fn = ($(el).attr('data-filename') || '').toLowerCase();
+        const alt = ($(el).attr('alt') || '').toLowerCase();
+
+        // 스폰서 배너, 작은 아이콘 제외
+        if (fn.includes('쿠팡') || alt.includes('쿠팡') || fn.includes('파트너스') || (w > 0 && h > 0 && w <= 450 && h <= 120)) {
+          return;
+        }
+
+        candidates.push(src);
+      });
+
+      if (candidates.length > 0) {
+        return candidates[0];
+      }
+
+      // fallback 첫 번째 유효 이미지
+      const firstImgSrc = $('img').first().attr('src') || $('img').first().attr('data-url');
       if (firstImgSrc && (firstImgSrc.startsWith('http://') || firstImgSrc.startsWith('https://'))) {
         return firstImgSrc;
       }
@@ -150,10 +180,18 @@ export async function parseSingleFeed(feed: FeedSource): Promise<ParsedPost[]> {
 
     for (const item of parsedFeed.items) {
       const link = item.link?.trim();
-      const title = item.title?.trim();
+      let title = item.title?.trim();
 
       // 필수 정보(URL, 제목)가 없으면 건너뜀
       if (!link || !title) continue;
+
+      // HTML 엔티티 정제
+      title = title
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
 
       // 썸네일 이미지 추출
       const thumbnailUrl = extractThumbnail(item);

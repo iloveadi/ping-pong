@@ -115,7 +115,7 @@ export default async function Image() {
             marginBottom: '36px',
           }}
         >
-          업무 생산성 도구부터 자동차 전문 라이프, 마음 치유 에세이까지 —
+          업무 생산성 도구부터 자동차 전문 라이프, 도서 인사이트, 마음 치유 에세이까지 —
           엄선된 블로그 아티클 실시간 큐레이션 포털
         </p>
 
@@ -123,17 +123,30 @@ export default async function Image() {
         <div
           style={{
             display: 'flex',
-            gap: '14px',
+            gap: '12px',
           }}
         >
           <div
             style={{
-              padding: '10px 20px',
+              padding: '8px 16px',
+              borderRadius: '999px',
+              background: 'rgba(139, 92, 246, 0.2)',
+              border: '1px solid rgba(139, 92, 246, 0.4)',
+              color: '#c4b5fd',
+              fontSize: '16px',
+              fontWeight: '700',
+            }}
+          >
+            📚 도서·인사이트
+          </div>
+          <div
+            style={{
+              padding: '8px 16px',
               borderRadius: '999px',
               background: 'rgba(16, 185, 129, 0.2)',
               border: '1px solid rgba(16, 185, 129, 0.4)',
               color: '#6ee7b7',
-              fontSize: '18px',
+              fontSize: '16px',
               fontWeight: '700',
             }}
           >
@@ -141,12 +154,12 @@ export default async function Image() {
           </div>
           <div
             style={{
-              padding: '10px 20px',
+              padding: '8px 16px',
               borderRadius: '999px',
               background: 'rgba(245, 158, 11, 0.2)',
               border: '1px solid rgba(245, 158, 11, 0.4)',
               color: '#fcd34d',
-              fontSize: '18px',
+              fontSize: '16px',
               fontWeight: '700',
             }}
           >
@@ -154,12 +167,12 @@ export default async function Image() {
           </div>
           <div
             style={{
-              padding: '10px 20px',
+              padding: '8px 16px',
               borderRadius: '999px',
               background: 'rgba(244, 63, 94, 0.2)',
               border: '1px solid rgba(244, 63, 94, 0.4)',
               color: '#fda4af',
-              fontSize: '18px',
+              fontSize: '16px',
               fontWeight: '700',
             }}
           >

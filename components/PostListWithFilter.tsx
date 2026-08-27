@@ -37,7 +37,7 @@ function formatDate(dateStr: string): string {
   }
 }
 
-// 4대 주제 카테고리 매핑 정의
+// 5대 주제 카테고리 매핑 정의
 export interface TopicCategory {
   id: string;
   name: string;
@@ -55,6 +55,14 @@ const TOPIC_CATEGORIES: TopicCategory[] = [
     blogNames: [],
     gradient: 'from-indigo-600 via-purple-600 to-amber-600',
     badgeStyle: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+  },
+  {
+    id: 'BOOKS',
+    name: '도서·인사이트',
+    icon: '📚',
+    blogNames: ['인사이트 북스', '인사이트 북스 (Insight Books)'],
+    gradient: 'from-violet-600 via-purple-600 to-fuchsia-600',
+    badgeStyle: 'bg-violet-950/90 text-violet-300 border-violet-500/40 shadow-[0_0_12px_rgba(139,92,246,0.25)]',
   },
   {
     id: 'TOOLS',
@@ -84,6 +92,19 @@ const TOPIC_CATEGORIES: TopicCategory[] = [
 
 // 블로그별 테마 컬러 매핑
 function getBlogTheme(blogName: string) {
+  if (blogName.includes('인사이트') || blogName.includes('Insight') || blogName.includes('read.pics')) {
+    return {
+      topicName: '도서·인사이트',
+      badge: 'text-violet-300 bg-violet-950/90 border-violet-500/40 shadow-[0_0_12px_rgba(139,92,246,0.25)]',
+      dot: 'bg-violet-400',
+      hover: 'group-hover:text-violet-300',
+      btnHover: 'hover:bg-violet-500/20 hover:border-violet-500/50 hover:text-violet-200',
+      placeholderGradient: 'from-violet-950/60 via-slate-900 to-purple-950/40',
+      iconColor: 'text-violet-400/70',
+      modalAccent: 'text-violet-400',
+      modalButton: 'from-violet-600 via-purple-600 to-fuchsia-600 hover:from-violet-500 hover:to-purple-500 shadow-violet-500/30',
+    };
+  }
   if (blogName.includes('Desktools')) {
     return {
       topicName: '업무·생산성',

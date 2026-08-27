@@ -30,7 +30,7 @@ export default async function HomePage() {
         '@id': 'https://www.moa.quest/#website',
         url: 'https://www.moa.quest',
         name: '모아 퀘스트 (MOA.QUEST)',
-        description: '생산성 도구, 자동차 라이프, 마음 치유 에세이까지 엄선된 블로그 아티클 큐레이션 포털',
+        description: '생산성 도구, 자동차 라이프, 도서 인사이트, 마음 치유 에세이까지 엄선된 블로그 아티클 큐레이션 포털',
         publisher: {
           '@type': 'Organization',
           name: '모아 퀘스트 (MOA.QUEST)',
@@ -46,7 +46,7 @@ export default async function HomePage() {
         '@id': 'https://www.moa.quest/#webpage',
         url: 'https://www.moa.quest',
         name: '모아 퀘스트 (MOA.QUEST) | 엄선된 블로그 & 라이프 큐레이션',
-        description: '업무 생산성 도구, 자동차 전문 정보, 마음 힐링 에세이의 핵심 요약과 공식 원문을 제공합니다.',
+        description: '업무 생산성 도구, 자동차 전문 정보, 도서 인사이트, 마음 힐링 에세이의 핵심 요약과 공식 원문을 제공합니다.',
         isPartOf: {
           '@id': 'https://www.moa.quest/#website',
         },
@@ -126,8 +126,8 @@ export default async function HomePage() {
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-300/90 leading-relaxed max-w-xl font-normal">
-              스마트한 업무 생산성 도구부터 자동차 전문 라이프, 마음 치유 에세이까지 — 
-              엄선된 4개 전문 블로그의 핵심 요약과 공식 원문을 한곳에서 편리하게 열람하세요.
+              스마트한 업무 생산성 도구부터 자동차 전문 라이프, 도서 인사이트, 마음 치유 에세이까지 — 
+              엄선된 전문 블로그의 핵심 요약과 공식 원문을 한곳에서 편리하게 열람하세요.
             </p>
           </div>
 

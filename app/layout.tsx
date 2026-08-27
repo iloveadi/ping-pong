@@ -3,6 +3,7 @@ import './globals.css';
 import SyncButton from '@/components/SyncButton';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.moa.quest'),
   title: '모아 퀘스트 (MOA.QUEST) | 엄선된 블로그 & 라이프 큐레이션',
   description: '생산성 도구, 자동차 라이프, 마음 치유 에세이까지 유익한 최신 블로그 아티클을 매일 엄선하여 전해드리는 지식 큐레이션 허브입니다.',
   keywords: ['모아 퀘스트', '모아퀘스트', 'MOA QUEST', 'moa.quest', '블로그 큐레이션', 'Desktools', '폐차마켓', '마음산책', '라이프 트렌드'],
@@ -29,8 +30,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: '모아 퀘스트 (MOA.QUEST) | 엄선된 블로그 & 라이프 큐레이션',
     description: '생산성 도구, 자동차 라이프, 마음 치유 에세이 등 유익한 아티클을 한곳에서 만나보세요.',
-    type: 'website',
+    url: 'https://www.moa.quest',
+    siteName: '모아 퀘스트 (MOA.QUEST)',
     locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '모아 퀘스트 (MOA.QUEST) | 엄선된 블로그 & 라이프 큐레이션',
+    description: '생산성 도구, 자동차 라이프, 마음 치유 에세이 등 유익한 아티클을 한곳에서 만나보세요.',
   },
 };
 

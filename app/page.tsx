@@ -8,16 +8,16 @@ export const revalidate = 60;
 
 export default async function HomePage() {
   // 1. DB에서 포스트 목록 조회 (RSC)
-  let posts = await getPosts(2000);
+  let posts = await getPosts(3000);
 
-  // Supabase에 과거 전체 데이터(1028건)가 아직 적재되지 않은 경우 자동 일괄 마이그레이션 1회 실행
-  if (posts.length < 500) {
+  // Supabase에 로컬 아티클(1,391건) 중 신규 포스트(read.pics 311건 등)가 아직 적재되지 않은 경우 자동 일괄 마이그레이션 1회 실행
+  if (posts.length < 1350) {
     try {
-      console.log(`[Init] DB 포스트 수가 ${posts.length}건이므로 과거 전체 아티클 마이그레이션을 실행합니다.`);
+      console.log(`[Init] DB 포스트 수가 ${posts.length}건이므로 로컬 아티클 마이그레이션을 실행합니다.`);
       await seedLocalPostsToSupabase();
-      posts = await getPosts(2000);
+      posts = await getPosts(3000);
     } catch (e) {
-      console.error('초기 과거 포스트 마이그레이션 오류:', e);
+      console.error('신규 로컬 포스트 Supabase 마이그레이션 오류:', e);
     }
   }
 

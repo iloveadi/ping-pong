@@ -24,11 +24,12 @@ export async function POST(request: NextRequest) {
 
     console.log('[Admin Sync] 관리자 인증 성공, 피드 동기화 시작...');
     
-    // 1. 혹시 과거 데이터가 DB에 없다면 과거 데이터 먼저 마이그레이션
-    const currentPosts = await getPosts(500);
+    // 1. 로컬에 준비된 과거 전체 아티클(1,391건) 중 Supabase에 없는 신규 포스트(read.pics 등) 자동 마이그레이션
     let seededCount = 0;
-    if (currentPosts.length < 500) {
+    try {
       seededCount = await seedLocalPostsToSupabase();
+    } catch (e) {
+      console.error('[Admin Sync] 로컬 아티클 마이그레이션 에러:', e);
     }
 
     // 2. 최신 RSS 피드 수집

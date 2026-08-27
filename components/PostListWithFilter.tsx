@@ -170,8 +170,11 @@ function PostCardItem({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={safeThumbnailUrl}
-            alt={post.title}
+            alt={`${post.blog_name} - ${post.title}`}
+            width={400}
+            height={250}
             loading="lazy"
+            decoding="async"
             referrerPolicy="no-referrer"
             onError={() => setImgError(true)}
             className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"

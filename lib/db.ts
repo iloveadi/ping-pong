@@ -31,23 +31,37 @@ function saveLocalPosts(posts: BlogPost[]): void {
 }
 
 /**
- * DB에서 최신 포스팅 목록을 조회하는 함수 (기본 최신순)
+ * DB에서 최신 포스팅 목록을 조회하는 함수 (기본 최신순, Supabase 1000건 제한 돌파 페이지네이션)
  */
-export async function getPosts(limit: number = 60, offset: number = 0): Promise<BlogPost[]> {
+export async function getPosts(limit: number = 3000, offset: number = 0): Promise<BlogPost[]> {
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .order('published_at', { ascending: false })
-        .range(offset, offset + limit - 1);
+      const allFetched: BlogPost[] = [];
+      const PAGE_SIZE = 1000;
+      let currentOffset = offset;
+      const targetTotal = offset + limit;
 
-      if (error) {
-        console.error('[Supabase] 포스트 조회 에러:', error);
-        return getLocalPosts().slice(offset, offset + limit);
+      while (currentOffset < targetTotal) {
+        const fetchLimit = Math.min(PAGE_SIZE, targetTotal - currentOffset);
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*')
+          .order('published_at', { ascending: false })
+          .range(currentOffset, currentOffset + fetchLimit - 1);
+
+        if (error) {
+          console.error('[Supabase] 포스트 조회 에러:', error);
+          if (allFetched.length > 0) return allFetched;
+          return getLocalPosts().slice(offset, offset + limit);
+        }
+
+        if (!data || data.length === 0) break;
+        allFetched.push(...(data as BlogPost[]));
+        if (data.length < fetchLimit) break; // 끝까지 조회 완료
+        currentOffset += data.length;
       }
 
-      return data as BlogPost[];
+      return allFetched;
     } catch (err) {
       console.error('[Supabase] 연결 실패, 로컬 데이터로 대체합니다:', err);
       return getLocalPosts().slice(offset, offset + limit);
@@ -60,6 +74,7 @@ export async function getPosts(limit: number = 60, offset: number = 0): Promise<
     .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
     .slice(offset, offset + limit);
 }
+
 
 /**
  * 파싱된 포스팅 목록을 중복 방어 로직을 적용하여 DB에 저장하는 함수

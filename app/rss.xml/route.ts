@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
   const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>핑퐁허브</title>
+    <title>모아 퀘스트 (MOA.QUEST)</title>
     <link>${escapedBaseUrl}</link>
     <description>생산성 도구, 자동차 라이프, 마음 치유 에세이 등 유익한 최신 블로그 아티클 큐레이션</description>
     <language>ko</language>

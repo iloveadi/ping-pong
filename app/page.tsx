@@ -39,7 +39,7 @@ export default async function HomePage() {
             {/* 상단 뱃지 (보색 대비: 인디고 배경 + 앰버 골드 스파클) */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11.5px] font-bold bg-gradient-to-r from-indigo-500/15 via-purple-500/15 to-amber-500/15 text-amber-300 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.15)] backdrop-blur-md">
               <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-              <span>실시간 블로그 &amp; 라이프 큐레이션 허브</span>
+              <span>모아 퀘스트 (MOA.QUEST) · 실시간 큐레이션 포털</span>
             </div>
 
             {/* 타이틀 (선명한 보색 그라디언트) */}

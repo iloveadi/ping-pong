@@ -78,20 +78,20 @@ export default function SyncButton() {
   return (
     <>
       <div className="inline-flex items-center gap-2">
-        {/* PingPong Hub 알약형 뱃지 스타일의 피드 동기화 버튼 */}
+        {/* MOA QUEST 알약형 뱃지 스타일의 피드 동기화 버튼 */}
         <button
           type="button"
           onClick={handleOpenModal}
           disabled={loading}
-          className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-indigo-500/15 to-purple-500/15 hover:from-indigo-500/30 hover:to-purple-500/30 text-indigo-300 hover:text-indigo-100 border border-indigo-500/30 hover:border-indigo-500/60 font-medium transition-all cursor-pointer shadow-sm active:scale-95 disabled:opacity-50"
+          className="inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-indigo-500/15 hover:from-amber-500/30 hover:to-indigo-500/30 text-amber-300 hover:text-amber-100 border border-amber-500/30 hover:border-amber-500/60 font-semibold transition-all cursor-pointer shadow-sm active:scale-95 disabled:opacity-50"
           title="관리자 피드 동기화 (클릭)"
         >
           {loading ? (
-            <RefreshCw className="w-3 h-3 text-indigo-400 animate-spin" />
+            <RefreshCw className="w-3 h-3 text-amber-400 animate-spin" />
           ) : (
-            <Sparkles className="w-3 h-3 text-indigo-400" />
+            <Sparkles className="w-3 h-3 text-amber-400" />
           )}
-          <span>PingPong Hub</span>
+          <span>MOA QUEST</span>
         </button>
 
         {statusMessage && (

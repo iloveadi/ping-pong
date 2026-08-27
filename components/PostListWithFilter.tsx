@@ -176,7 +176,7 @@ export default function PostListWithFilter({ initialPosts }: Props) {
           <p className="text-slate-500 text-sm">조건에 맞는 포스팅이 없습니다.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
           {visiblePosts.map((post) => {
             const theme = getBlogTheme(post.blog_name);
             return (

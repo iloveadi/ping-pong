@@ -203,8 +203,8 @@ export default function PostListWithFilter({ initialPosts }: Props) {
                   {/* 그라디언트 오버레이 */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                  {/* 블로그 뱃지 */}
-                  <span className={`absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[10px] font-semibold border backdrop-blur-sm ${theme.badge}`}>
+                  {/* 블로그 뱃지 - 우측 하단 */}
+                  <span className={`absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md text-[10px] font-semibold border backdrop-blur-sm ${theme.badge}`}>
                     {post.blog_name}
                   </span>
                 </div>

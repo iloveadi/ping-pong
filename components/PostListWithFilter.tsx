@@ -173,33 +173,56 @@ function PostCardItem({
   const safeThumbnailUrl = useMemo(() => {
     if (!post.thumbnail_url) return null;
     if (post.thumbnail_url.includes('unsplash.com')) return null;
-    if (post.thumbnail_url.startsWith('http://')) {
-      return post.thumbnail_url.replace('http://', 'https://');
+    let url = post.thumbnail_url;
+    if (url.startsWith('http://')) {
+      url = url.replace('http://', 'https://');
     }
-    return post.thumbnail_url;
+    // 네이버 블로그 썸네일이 정사각형 크롭(type=s3)으로 잘리지 않고
+    // 16:9 와이드 원본 비율 전체 샷(type=w2)으로 표시되도록 변환
+    if (url.includes('pstatic.net')) {
+      if (url.includes('type=')) {
+        url = url.replace(/([?&])type=[a-zA-Z0-9_]+/, '$1type=w2');
+      } else {
+        url += (url.includes('?') ? '&' : '?') + 'type=w2';
+      }
+    }
+    return url;
   }, [post.thumbnail_url]);
 
   return (
     <article className="post-card group flex flex-col rounded-2xl overflow-hidden shadow-lg cursor-pointer">
-      {/* 썸네일 영역 */}
+      {/* 썸네일 영역: 원본 이미지 전체 샷(Full Shot) 노출 */}
       <div
         onClick={() => onOpenDetail(post)}
-        className="relative aspect-[16/10] w-full overflow-hidden bg-slate-950 cursor-pointer"
+        className="relative aspect-[16/9] w-full overflow-hidden bg-slate-950/95 cursor-pointer flex items-center justify-center border-b border-white/[0.06]"
         title="클릭하여 상세 요약 보기"
       >
         {safeThumbnailUrl && !imgError ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={safeThumbnailUrl}
-            alt={`${post.blog_name} - ${post.title}`}
-            width={400}
-            height={250}
-            loading="lazy"
-            decoding="async"
-            referrerPolicy="no-referrer"
-            onError={() => setImgError(true)}
-            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
-          />
+          <>
+            {/* 앰비언트 블러 백드롭: 이미지 색상에 맞춘 은은한 후광 배경 */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={safeThumbnailUrl}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover blur-xl scale-125 opacity-30 pointer-events-none select-none"
+              referrerPolicy="no-referrer"
+            />
+
+            {/* 원본 전체 샷 메인 이미지: 상하좌우 글씨와 사진이 단 1px도 잘리지 않고 온전히 노출 */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={safeThumbnailUrl}
+              alt={`${post.blog_name} - ${post.title}`}
+              width={400}
+              height={225}
+              loading="lazy"
+              decoding="async"
+              referrerPolicy="no-referrer"
+              onError={() => setImgError(true)}
+              className="relative z-10 max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+            />
+          </>
         ) : (
           <div
             className={`w-full h-full flex flex-col items-center justify-center bg-gradient-to-br ${theme.placeholderGradient} p-4 text-center`}
@@ -211,11 +234,8 @@ function PostCardItem({
           </div>
         )}
 
-        {/* 하단 그라디언트 섀도우 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity pointer-events-none" />
-
-        {/* 블로그 뱃지 - 우측 하단 */}
-        <div className="absolute bottom-2.5 right-2.5 pointer-events-none">
+        {/* 블로그 뱃지 - 이미지 상단 우측에 배치하여 원본 이미지 하단 정보(텍스트/로고) 가림 완벽 방지 */}
+        <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none">
           <span
             className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border backdrop-blur-md shadow-md ${theme.badge}`}
           >
@@ -342,6 +362,37 @@ function PostDetailModal({
         <h2 className="text-lg sm:text-xl font-black text-white leading-snug tracking-tight">
           {post.title}
         </h2>
+
+        {/* 썸네일 이미지 전체 샷 (모달) */}
+        {(() => {
+          if (!post.thumbnail_url || post.thumbnail_url.includes('unsplash.com')) return null;
+          let modalThumb = post.thumbnail_url;
+          if (modalThumb.startsWith('http://')) modalThumb = modalThumb.replace('http://', 'https://');
+          if (modalThumb.includes('pstatic.net')) {
+            modalThumb = modalThumb.includes('type=')
+              ? modalThumb.replace(/([?&])type=[a-zA-Z0-9_]+/, '$1type=w2')
+              : modalThumb + (modalThumb.includes('?') ? '&' : '?') + 'type=w2';
+          }
+          return (
+            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-slate-950/90 flex items-center justify-center border border-white/[0.08] shadow-inner">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={modalThumb}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover blur-xl scale-125 opacity-30 pointer-events-none"
+                referrerPolicy="no-referrer"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={modalThumb}
+                alt={post.title}
+                className="relative z-10 max-w-full max-h-full w-auto h-auto object-contain rounded-xl"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          );
+        })()}
 
         {/* 150자 핵심 요약 박스 */}
         <div className="p-4.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-2">

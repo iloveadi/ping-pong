@@ -96,17 +96,17 @@ export function cleanAndTruncateSummary(rawHtmlOrText?: string, maxLength: numbe
 export function extractThumbnail(item: any): string {
   // 1. media:content 또는 media:thumbnail 속성 확인
   if (item['media:content'] && item['media:content'].$ && item['media:content'].$.url) {
-    return item['media:content'].$.url;
+    return normalizeThumbnailUrl(item['media:content'].$.url);
   }
   if (item['media:thumbnail'] && item['media:thumbnail'].$ && item['media:thumbnail'].$.url) {
-    return item['media:thumbnail'].$.url;
+    return normalizeThumbnailUrl(item['media:thumbnail'].$.url);
   }
 
   // 2. enclosure 태그 확인 (이미지 타입)
   if (item.enclosure && item.enclosure.url) {
     const type = item.enclosure.type || '';
     if (type.startsWith('image/') || item.enclosure.url.match(/\.(jpeg|jpg|gif|png|webp)/i)) {
-      return item.enclosure.url;
+      return normalizeThumbnailUrl(item.enclosure.url);
     }
   }
 
@@ -134,13 +134,13 @@ export function extractThumbnail(item: any): string {
       });
 
       if (candidates.length > 0) {
-        return candidates[0];
+        return normalizeThumbnailUrl(candidates[0]);
       }
 
       // fallback 첫 번째 유효 이미지
       const firstImgSrc = $('img').first().attr('src') || $('img').first().attr('data-url');
       if (firstImgSrc && (firstImgSrc.startsWith('http://') || firstImgSrc.startsWith('https://'))) {
-        return firstImgSrc;
+        return normalizeThumbnailUrl(firstImgSrc);
       }
     } catch {
       // 파싱 실패 시 무시
@@ -149,6 +149,26 @@ export function extractThumbnail(item: any): string {
 
   // 4. 본문에 실제 이미지가 없을 경우 빈 문자열 반환 (UI에서 깔끔한 브랜드 플레이스홀더 표시)
   return '';
+}
+
+/**
+ * 네이버 등 특정 플랫폼의 썸네일 URL을 크롭 없는 원본 비율 와이드(type=w2)로 정규화
+ */
+export function normalizeThumbnailUrl(url?: string | null): string {
+  if (!url) return '';
+  let cleanUrl = url.trim();
+  if (cleanUrl.startsWith('http://')) {
+    cleanUrl = cleanUrl.replace('http://', 'https://');
+  }
+  // 네이버 블로그 썸네일이 정사각형 크롭(type=s3)으로 잘리는 문제 방지 -> 원본 와이드 비율 전체 샷(type=w2)으로 변환
+  if (cleanUrl.includes('pstatic.net')) {
+    if (cleanUrl.includes('type=')) {
+      cleanUrl = cleanUrl.replace(/([?&])type=[a-zA-Z0-9_]+/, '$1type=w2');
+    } else {
+      cleanUrl += (cleanUrl.includes('?') ? '&' : '?') + 'type=w2';
+    }
+  }
+  return cleanUrl;
 }
 
 /**

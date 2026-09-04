@@ -14,8 +14,8 @@ function escapeXml(unsafe: string): string {
 }
 
 export async function GET(request: NextRequest) {
-  // 실제 요청 호스트 (예: moa.quest 또는 www.moa.quest) 자동 감지
-  const host = request.headers.get('host') || 'moa.quest';
+  // 실제 요청 호스트 (예: www.moa.quest) 자동 감지
+  const host = request.headers.get('host') || 'www.moa.quest';
   const protocol = host.includes('localhost') ? 'http' : 'https';
   const baseUrl = `${protocol}://${host}`;
 
@@ -28,8 +28,8 @@ export async function GET(request: NextRequest) {
         : new Date().toUTCString();
       const escapedTitle = escapeXml(post.title || '');
       const escapedSummary = escapeXml(post.summary || '');
-      // 네이버 서치어드바이저 RSS 필수 규칙: <link>와 <guid>가 반드시 등록 사이트 도메인(moa.quest) 내부 URL이어야 함!
-      const siteItemLink = escapeXml(`${baseUrl}/?post=${encodeURIComponent(post.id || idx)}`);
+      // 네이버 서치어드바이저 RSS 필수 규칙: <link>와 <guid>가 반드시 등록 사이트 도메인(moa.quest) 내부 개별 URL이어야 함!
+      const siteItemLink = escapeXml(`${baseUrl}/post/${encodeURIComponent(post.id || idx)}`);
       const originalUrl = escapeXml(post.original_url || baseUrl);
 
       return `    <item>

@@ -7,13 +7,19 @@ export const metadata: Metadata = {
   title: '모아 퀘스트 (MOA.QUEST) | 엄선된 블로그 & 라이프 큐레이션',
   description: '생산성 도구, 자동차 라이프, 도서 인사이트, 마음 치유 에세이까지 유익한 최신 블로그 아티클을 매일 엄선하여 전해드리는 지식 큐레이션 허브입니다.',
   keywords: ['모아 퀘스트', '모아퀘스트', 'MOA QUEST', 'moa.quest', '블로그 큐레이션', '인사이트 북스', 'read.pics', 'Desktools', '폐차마켓', '마음산책', '라이프 트렌드'],
-  referrer: 'no-referrer',
+  referrer: 'strict-origin-when-cross-origin',
+  alternates: {
+    canonical: '/',
+  },
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
   },
   verification: {

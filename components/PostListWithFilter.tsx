@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import Link from 'next/link';
 import { BlogPost } from '@/lib/types';
 import {
   ExternalLink,
@@ -258,11 +259,14 @@ function PostCardItem({
             </span>
           </div>
 
-          {/* 제목 */}
-          <h3
-            className={`text-[14.5px] font-extrabold text-slate-100 leading-snug tracking-tight ${theme.hover} transition-colors line-clamp-2`}
-          >
-            {post.title}
+          {/* 제목 (단독 페이지 링크 및 검색봇 크롤링 태그) */}
+          <h3 className="text-[14.5px] font-extrabold text-slate-100 leading-snug tracking-tight line-clamp-2">
+            <Link
+              href={`/post/${encodeURIComponent(post.id)}`}
+              className={`${theme.hover} transition-colors hover:underline`}
+            >
+              {post.title}
+            </Link>
           </h3>
 
           {/* 150자 요약 본문 */}
@@ -281,6 +285,15 @@ function PostCardItem({
           >
             요약 보기
           </button>
+
+          {/* 단독 페이지 링크 (검색봇 크롤링 & 새 탭 열기) */}
+          <Link
+            href={`/post/${encodeURIComponent(post.id)}`}
+            className="p-2 text-xs font-semibold text-slate-400 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl transition-all flex items-center justify-center"
+            title="단독 페이지로 보기"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+          </Link>
 
           {/* 원문 다이렉트 dofollow 링크 */}
           <a
@@ -322,7 +335,10 @@ function PostDetailModal({
   const theme = getBlogTheme(post.blog_name);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(post.original_url);
+    const shareUrl = typeof window !== 'undefined'
+      ? `${window.location.origin}/post/${encodeURIComponent(post.id)}`
+      : post.original_url;
+    navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -412,6 +428,14 @@ function PostDetailModal({
 
         {/* 하단 버튼 바 */}
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+          <Link
+            href={`/post/${encodeURIComponent(post.id)}`}
+            className="w-full sm:w-auto px-4 py-3 text-xs font-semibold text-slate-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] rounded-2xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+            <span>단독 페이지</span>
+          </Link>
+
           <button
             type="button"
             onClick={handleCopyLink}

@@ -75,6 +75,39 @@ export async function getPosts(limit: number = 3000, offset: number = 0): Promis
     .slice(offset, offset + limit);
 }
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+/**
+ * 특정 ID의 포스트 단건 조회 (Supabase 우선, 로컬 폴백)
+ */
+export async function getPostById(id: string): Promise<BlogPost | null> {
+  if (!id) return null;
+  const decodedId = decodeURIComponent(id);
+
+  if (isSupabaseConfigured && supabase && UUID_REGEX.test(decodedId)) {
+    try {
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('id', decodedId)
+        .maybeSingle();
+
+      if (!error && data) {
+        return data as BlogPost;
+      }
+    } catch (err) {
+      console.error('[Supabase] getPostById 조회 실패:', err);
+    }
+  }
+
+  // 로컬 posts.json에서 ID 매칭
+  const localPosts = getLocalPosts();
+  const found = localPosts.find((p) => String(p.id) === decodedId);
+  if (found) return found;
+
+  return null;
+}
+
 
 /**
  * 파싱된 포스팅 목록을 중복 방어 로직을 적용하여 DB에 저장하는 함수

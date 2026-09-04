@@ -6,5 +6,8 @@ User-agent: Yeti
 Allow: /
 Disallow: /api/
 
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
 Sitemap: https://www.moa.quest/sitemap.xml
-Sitemap: https://moa.quest/sitemap.xml

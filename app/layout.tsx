@@ -25,12 +25,12 @@ export const metadata: Metadata = {
   verification: {
     google: 'JXr-mwmn5Z5l6c2TZS4PrGbmBOGWM6jD12uQuaApk64',
     other: {
-      'naver-site-verification': 'dbffbb79f2d90d1b5c30946946627df41bba41d2',
+      'naver-site-verification': 'dba3c216c6dbfce10b2c94bca823f8a89aec2cd8',
       'google-site-verification': 'JXr-mwmn5Z5l6c2TZS4PrGbmBOGWM6jD12uQuaApk64',
     },
   },
   other: {
-    'naver-site-verification': 'dbffbb79f2d90d1b5c30946946627df41bba41d2',
+    'naver-site-verification': 'dba3c216c6dbfce10b2c94bca823f8a89aec2cd8',
     'google-site-verification': 'JXr-mwmn5Z5l6c2TZS4PrGbmBOGWM6jD12uQuaApk64',
   },
   openGraph: {
